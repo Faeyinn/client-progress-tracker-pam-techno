@@ -1,0 +1,67 @@
+generator client {
+  provider   = "prisma-client-js"
+  engineType = "client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id       String @id @default(cuid())
+  username String @unique
+  password String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Project {
+  id           String   @id @default(cuid())
+  clientName   String   @map("client_name")
+  clientPhone  String   @map("client_phone")
+  projectName  String   @map("project_name")
+  uniqueToken  String   @unique @map("unique_token") @default(cuid())
+  deadline     DateTime
+  status       String   @default("On Progress")
+  
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  logs         ProjectLog[]
+  feedbacks    ClientFeedback[]
+
+  @@index([uniqueToken])
+  @@index([clientPhone])
+  @@map("projects")
+}
+
+model ProjectLog {
+  id          String   @id @default(cuid())
+  projectId   String   @map("project_id")
+  title       String   
+  description String   @db.Text
+  percentage  Int      
+  
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@map("project_logs")
+}
+
+model ClientFeedback {
+  id        String   @id @default(cuid())
+  projectId String   @map("project_id")
+  message   String   @db.Text
+  
+  createdAt DateTime @default(now()) @map("created_at")
+
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@map("client_feedbacks")
+}
