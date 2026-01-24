@@ -1,16 +1,19 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { sendWhatsAppFonnte } from "@/lib/whatsapp";
-import type { Prisma } from "@prisma/client";
 
-type ProjectWithLatestLog = Prisma.ProjectGetPayload<{
-  include: {
-    logs: {
-      orderBy: [{ createdAt: "desc" }, { percentage: "desc" }];
-      take: 1;
-    };
-  };
-}>;
+type ProjectWithLatestLog = {
+  id: string;
+  clientName: string;
+  clientPhone: string;
+  projectName: string;
+  uniqueToken: string;
+  deadline: Date;
+  status: string;
+  createdAt: Date;
+  updatedAt: Date;
+  logs: Array<{ percentage: number }>;
+};
 
 function normalizePhone(input: string): string {
   let phone = input.replace(/\D/g, "");
@@ -25,7 +28,7 @@ function isValidIndoWhatsApp(phone: string): boolean {
 
 export async function GET() {
   try {
-    const projects = await prisma.project.findMany({
+    const projects = (await prisma.project.findMany({
       include: {
         logs: {
           orderBy: [{ createdAt: "desc" }, { percentage: "desc" }],
@@ -33,7 +36,7 @@ export async function GET() {
         },
       },
       orderBy: { createdAt: "desc" },
-    });
+    })) as ProjectWithLatestLog[];
 
     const projectsWithProgress = projects.map((project: ProjectWithLatestLog) => {
       const progress = project.logs[0]?.percentage || 0;
