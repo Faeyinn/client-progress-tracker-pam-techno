@@ -211,7 +211,7 @@
 
   /* Touch-friendly target size */
   .touch-target {
-    @apply min-h-[44px] min-w-[44px];
+    @apply min-h-11 min-w-11;
   }
 
   /* Card hover lift effect */
