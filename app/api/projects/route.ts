@@ -1,6 +1,16 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { sendWhatsAppFonnte } from "@/lib/whatsapp";
+import type { Prisma } from "@prisma/client";
+
+type ProjectWithLatestLog = Prisma.ProjectGetPayload<{
+  include: {
+    logs: {
+      orderBy: [{ createdAt: "desc" }, { percentage: "desc" }];
+      take: 1;
+    };
+  };
+}>;
 
 function normalizePhone(input: string): string {
   let phone = input.replace(/\D/g, "");
@@ -25,7 +35,7 @@ export async function GET() {
       orderBy: { createdAt: "desc" },
     });
 
-    const projectsWithProgress = projects.map((project) => {
+    const projectsWithProgress = projects.map((project: ProjectWithLatestLog) => {
       const progress = project.logs[0]?.percentage || 0;
       // Ensure status is consistent with progress, handling existing data issues
       const status = progress === 100 ? "Done" : project.status;
