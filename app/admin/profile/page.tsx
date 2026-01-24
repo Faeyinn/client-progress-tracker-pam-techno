@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { User, Mail, Shield, ArrowLeft } from "lucide-react";
+import { User, Shield, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DashboardHeader } from "@/components/admin/dashboard/dashboard-header";

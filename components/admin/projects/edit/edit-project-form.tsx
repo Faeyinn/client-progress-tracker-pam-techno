@@ -28,7 +28,6 @@ import {
   AlertTriangle,
   Loader2,
   Save,
-  ChevronLeft,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Project } from "@/lib/types/project";
@@ -131,7 +130,7 @@ export function EditProjectForm({ project }: EditProjectFormProps) {
       } else {
         toast.error(data.message || "Gagal mengupdate proyek");
       }
-    } catch (err) {
+    } catch {
       toast.error("Terjadi kesalahan. Silakan coba lagi.");
     } finally {
       setIsSubmitting(false);
@@ -211,9 +210,9 @@ export function EditProjectForm({ project }: EditProjectFormProps) {
                 Format: 628xxxxxxxxxx (diawali dengan 62)
               </p>
               {phoneChanged && (
-                <Alert className="bg-amber-50/50 border-amber-200">
-                  <AlertTriangle className="h-4 w-4 text-amber-600" />
-                  <AlertDescription className="text-amber-800 text-xs">
+                <Alert className="bg-muted/50 border-border">
+                  <AlertTriangle className="h-4 w-4 text-foreground" />
+                  <AlertDescription className="text-foreground text-xs">
                     Nomor WhatsApp akan diubah.
                   </AlertDescription>
                 </Alert>
@@ -281,7 +280,7 @@ export function EditProjectForm({ project }: EditProjectFormProps) {
             <div className="flex flex-col gap-3 pt-4">
               <Button
                 type="submit"
-                className="w-full bg-black hover:bg-gray-800 text-white shadow-sm hover:shadow-md transition-all font-medium"
+                className="w-full bg-foreground hover:bg-foreground/90 text-background shadow-sm hover:shadow-md transition-all font-medium"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? (

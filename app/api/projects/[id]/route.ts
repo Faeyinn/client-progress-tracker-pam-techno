@@ -1,5 +1,17 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { sendWhatsAppFonnte } from "@/lib/whatsapp";
+
+function normalizePhone(input: string): string {
+  let phone = input.replace(/\D/g, "");
+  if (phone.startsWith("0")) phone = "62" + phone.slice(1);
+  if (!phone.startsWith("62")) phone = "62" + phone;
+  return phone;
+}
+
+function isValidIndoWhatsApp(phone: string): boolean {
+  return /^62\d{8,15}$/.test(phone);
+}
 
 export async function GET(
   request: Request,
@@ -40,6 +52,7 @@ export async function GET(
 
     return NextResponse.json(project);
   } catch (error) {
+    console.error("Get project error:", error);
     return NextResponse.json(
       { message: "Internal server error" },
       { status: 500 },
@@ -54,23 +67,73 @@ export async function PUT(
   try {
     const resolvedParams = await params;
     const id = resolvedParams.id;
-    const body = await request.json();
+    const body = await request.json().catch(() => ({}));
 
-    const { clientName, clientPhone, projectName, deadline, status } = body;
+    const clientName =
+      typeof body?.clientName === "string" ? body.clientName : undefined;
+    const projectName =
+      typeof body?.projectName === "string" ? body.projectName : undefined;
+
+    const rawPhone =
+      typeof body?.clientPhone === "string"
+        ? body.clientPhone
+        : typeof body?.client_phone === "string"
+          ? body.client_phone
+          : undefined;
+
+    const deadline = body?.deadline;
+    const status = typeof body?.status === "string" ? body.status : undefined;
+
+    const phoneChanged = Boolean(body?.phoneChanged);
+    const sendNotificationToNewPhone = Boolean(
+      body?.sendNotificationToNewPhone,
+    );
+
+    const normalizedPhone = rawPhone ? normalizePhone(rawPhone) : undefined;
+    if (normalizedPhone && !isValidIndoWhatsApp(normalizedPhone)) {
+      return NextResponse.json(
+        { message: "Format nomor WhatsApp tidak valid" },
+        { status: 400 },
+      );
+    }
 
     const updatedProject = await prisma.project.update({
       where: { id },
       data: {
         clientName,
-        clientPhone,
+        clientPhone: normalizedPhone,
         projectName,
         deadline: deadline ? new Date(deadline) : undefined,
         status,
       },
     });
 
+    if (
+      phoneChanged &&
+      sendNotificationToNewPhone &&
+      updatedProject.clientPhone
+    ) {
+      const origin =
+        request.headers.get("origin") || new URL(request.url).origin;
+      const magicLink = `${origin}/track/${updatedProject.uniqueToken}`;
+      const message =
+        `Halo *${updatedProject.clientName}* !\n` +
+        `Nomor WhatsApp Anda telah diperbarui di sistem kami.\n\n` +
+        `Ini link tracking proyek Anda: ${magicLink}`;
+
+      const sendResult = await sendWhatsAppFonnte({
+        to: updatedProject.clientPhone,
+        message,
+      });
+
+      if (!sendResult.ok) {
+        console.error("WhatsApp phone-update send failed:", sendResult);
+      }
+    }
+
     return NextResponse.json(updatedProject);
   } catch (error) {
+    console.error("Update project error:", error);
     return NextResponse.json(
       { message: "Failed to update project" },
       { status: 500 },
@@ -92,6 +155,7 @@ export async function DELETE(
 
     return NextResponse.json({ message: "Project deleted successfully" });
   } catch (error) {
+    console.error("Delete project error:", error);
     return NextResponse.json(
       { message: "Failed to delete project" },
       { status: 500 },

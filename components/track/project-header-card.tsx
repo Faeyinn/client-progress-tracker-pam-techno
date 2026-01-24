@@ -1,12 +1,5 @@
 import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Calendar,
   User,
@@ -44,8 +37,8 @@ export function ProjectHeaderCard({
               className={cn(
                 "mb-2 w-fit flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold uppercase tracking-wider",
                 isDone
-                  ? "bg-emerald-50 text-emerald-700 border-emerald-200"
-                  : "bg-amber-50 text-amber-700 border-amber-200",
+                  ? "bg-foreground text-background border-foreground/20"
+                  : "bg-muted text-foreground border-border",
               )}
             >
               {isDone ? (
@@ -64,7 +57,7 @@ export function ProjectHeaderCard({
             </div>
           </div>
 
-          <div className="flex flex-col items-end justify-center bg-zinc-50 px-5 py-3 rounded-xl border border-border/50 min-w-[140px]">
+          <div className="flex flex-col items-end justify-center bg-muted px-5 py-3 rounded-xl border border-border/50 min-w-[140px]">
             <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">
               Total Progress
             </span>
@@ -111,12 +104,9 @@ export function ProjectHeaderCard({
               <span>0%</span>
               <span>100%</span>
             </div>
-            <div className="w-full bg-zinc-200 rounded-full h-3 overflow-hidden">
+            <div className="w-full bg-muted rounded-full h-3 overflow-hidden">
               <div
-                className={cn(
-                  "h-full rounded-full transition-all duration-1000 ease-out",
-                  isDone ? "bg-emerald-500" : "bg-black",
-                )}
+                className="h-full rounded-full transition-all duration-1000 ease-out bg-foreground"
                 style={{ width: `${latestProgress}%` }}
               />
             </div>

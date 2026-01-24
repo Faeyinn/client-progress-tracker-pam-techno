@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { sendWhatsAppFonnte } from "@/lib/whatsapp";
 
 export async function POST(
   request: Request,
@@ -22,6 +23,17 @@ export async function POST(
       );
     }
 
+    const project = await prisma.project.findUnique({
+      where: { id: projectId },
+    });
+
+    if (!project) {
+      return NextResponse.json(
+        { message: "Project not found" },
+        { status: 404 },
+      );
+    }
+
     const log = await prisma.projectLog.create({
       data: {
         projectId,
@@ -41,12 +53,36 @@ export async function POST(
     });
 
     if (sendNotification) {
-      // TODO: Implement WhatsApp notification logic here
-      console.log(`Sending WhatsApp notification for project ${projectId}`);
+      if (project.clientPhone) {
+        try {
+          const origin =
+            request.headers.get("origin") || new URL(request.url).origin;
+          const magicLink = `${origin}/track/${project.uniqueToken}`;
+
+          const message =
+            `Halo *${project.clientName}* !\n` +
+            `Ada update progress untuk proyek: *${project.projectName}*\n\n` +
+            `Update: *${title}*\n` +
+            `Progress: *${percentageInt}%*\n\n` +
+            `Lihat detail: ${magicLink}`;
+
+          const sendResult = await sendWhatsAppFonnte({
+            to: project.clientPhone,
+            message,
+          });
+
+          if (!sendResult.ok) {
+            console.error("WhatsApp log update send failed:", sendResult);
+          }
+        } catch (error) {
+          console.error("WhatsApp log update threw:", error);
+        }
+      }
     }
 
     return NextResponse.json(log, { status: 201 });
   } catch (error) {
+    console.error("Create log error:", error);
     return NextResponse.json(
       { message: "Gagal membuat log baru" },
       { status: 500 },
@@ -69,6 +105,7 @@ export async function GET(
 
     return NextResponse.json(logs);
   } catch (error) {
+    console.error("Get logs error:", error);
     return NextResponse.json(
       { message: "Gagal mengambil data log" },
       { status: 500 },

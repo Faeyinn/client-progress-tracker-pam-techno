@@ -10,7 +10,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { MessageSquare, Send, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -48,7 +47,7 @@ export function FeedbackForm({ token }: FeedbackFormProps) {
       } else {
         toast.error("Gagal mengirim feedback. Silakan coba lagi.");
       }
-    } catch (err) {
+    } catch {
       toast.error("Terjadi kesalahan koneksi.");
     } finally {
       setIsSending(false);
@@ -58,14 +57,14 @@ export function FeedbackForm({ token }: FeedbackFormProps) {
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-3 mb-2 px-2">
-        <div className="w-8 h-8 rounded-full bg-zinc-100 flex items-center justify-center text-zinc-600">
+        <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center text-muted-foreground">
           <MessageSquare className="w-4 h-4" />
         </div>
         <h3 className="text-xl font-bold">Feedback & Request</h3>
       </div>
 
-      <Card className="border border-border/50 shadow-sm bg-white overflow-hidden">
-        <div className="h-1 bg-gradient-to-r from-zinc-200 to-black w-full" />
+      <Card className="border border-border/50 shadow-sm bg-card overflow-hidden">
+        <div className="h-1 bg-gradient-to-r from-muted to-foreground w-full" />
         <CardHeader className="pb-4">
           <CardTitle className="text-lg">Punya Masukan untuk Kami?</CardTitle>
           <CardDescription className="text-base text-muted-foreground">
@@ -81,7 +80,7 @@ export function FeedbackForm({ token }: FeedbackFormProps) {
                 value={feedback}
                 onChange={(e) => setFeedback(e.target.value)}
                 rows={5}
-                className="resize-none text-base bg-muted/20 focus:bg-white transition-colors border-border/60"
+                className="resize-none text-base bg-muted/20 focus:bg-card transition-colors border-border/60"
                 disabled={isSending}
                 maxLength={500}
               />
@@ -99,7 +98,7 @@ export function FeedbackForm({ token }: FeedbackFormProps) {
 
             <Button
               type="submit"
-              className="w-full h-11 text-base font-medium bg-black hover:bg-zinc-800 text-white shadow-sm transition-all"
+              className="w-full h-11 text-base font-medium bg-foreground hover:bg-foreground/90 text-background shadow-sm transition-all"
               disabled={isSending || !feedback.trim()}
             >
               {isSending ? (

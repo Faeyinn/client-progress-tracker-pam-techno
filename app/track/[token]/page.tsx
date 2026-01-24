@@ -10,7 +10,6 @@ import { TimelineSection } from "@/components/track/timeline-section";
 import { FeedbackForm } from "@/components/track/feedback-form";
 import { ContactFooter } from "@/components/track/contact-footer";
 import { useTracking } from "@/components/track/hooks/use-tracking";
-import { cn } from "@/lib/utils";
 
 export default function TrackPage() {
   const params = useParams();
@@ -40,8 +39,8 @@ export default function TrackPage() {
         <Card className="max-w-md w-full border border-border/60 shadow-lg bg-card text-card-foreground">
           <CardContent className="pt-8 pb-8 px-6">
             <div className="text-center space-y-4">
-              <div className="w-16 h-16 rounded-full bg-red-50 flex items-center justify-center mx-auto">
-                <AlertCircle className="w-8 h-8 text-red-500" />
+              <div className="w-16 h-16 rounded-full bg-destructive/10 flex items-center justify-center mx-auto">
+                <AlertCircle className="w-8 h-8 text-destructive" />
               </div>
               <div>
                 <h2 className="text-2xl font-bold text-foreground mb-2">
@@ -53,7 +52,7 @@ export default function TrackPage() {
               </div>
               <Button
                 onClick={() => (window.location.href = "/")}
-                className="w-full bg-black hover:bg-zinc-800 text-white shadow-sm transition-all"
+                className="w-full bg-foreground hover:bg-foreground/90 text-background shadow-sm transition-all"
               >
                 Kembali ke Beranda
               </Button>
@@ -65,7 +64,7 @@ export default function TrackPage() {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-50/50">
+    <div className="min-h-screen bg-background">
       <TrackHeader />
 
       <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
@@ -82,8 +81,7 @@ export default function TrackPage() {
           <FeedbackForm token={token} />
         </div>
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-500">
-          {/* Assume clientPhone is valid. Type check if optional? Project interface has it as string */}
-          <ContactFooter clientPhone={project.clientPhone} />
+          <ContactFooter />
         </div>
       </main>
     </div>

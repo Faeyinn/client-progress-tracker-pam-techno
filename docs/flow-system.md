@@ -8,14 +8,12 @@ Dibagi menjadi tiga sisi: **Sisi Admin (PAM Techno)**, **Sisi Klien**, dan **Hal
 
 1. **Login:** Admin masuk ke dashboard (username/password).
 2. **Input Data:** Admin membuat proyek baru dengan mengisi:
-
    - Nama Klien
    - Nomor WhatsApp Klien (Wajib diawali 62)
    - Nama Proyek (misal: "Web Company Profile")
    - Deadline
 
 3. **Generate Token:** Saat tombol "Simpan" ditekan:
-
    - Sistem membuat data di database
    - Sistem otomatis men-generate **Unique Token** (kode acak unik, misal: `trx-8823-pam`)
    - Sistem membuat **Magic Link** (misal: `pamtechno.id/track/trx-8823-pam`)
@@ -29,7 +27,6 @@ Dibagi menjadi tiga sisi: **Sisi Admin (PAM Techno)**, **Sisi Klien**, dan **Hal
 
 1. **Pilih Proyek:** Admin memilih proyek dari list yang sedang berjalan.
 2. **Update Status:** Admin menekan tombol "Tambah Log/Progres".
-
    - Input: Judul Tahapan (misal: "UI Design Selesai"), Deskripsi, dan Persentase (0-100%)
 
 3. **Trigger WA:** Saat Admin klik "Update":
@@ -42,7 +39,6 @@ Dibagi menjadi tiga sisi: **Sisi Admin (PAM Techno)**, **Sisi Klien**, dan **Hal
 
 1. **Klik Link:** Klien menerima WA → Klik Magic Link.
 2. **Validasi:** Sistem mengecek Token di URL.
-
    - Jika Token benar → Tampilkan halaman Timeline
    - Jika Token salah → Tampilkan "Data tidak ditemukan"
 
@@ -86,7 +82,7 @@ Dibagi menjadi tiga sisi: **Sisi Admin (PAM Techno)**, **Sisi Klien**, dan **Hal
 3. **Input Feedback:** Klien menulis pesan di textarea (misal: "Mohon revisi warna logo menjadi biru")
 4. **Submit:** Klien klik tombol "Kirim Feedback"
 5. **Proses Backend:**
-   - Sistem menyimpan feedback ke database (opsional, untuk history)
+   - Sistem menyimpan feedback ke database
    - Sistem trigger API WhatsApp → Kirim notifikasi ke **Admin PAM Techno**
    - Pesan berisi: Nama Klien, Nama Proyek, dan Isi Feedback
 6. **Konfirmasi:** Tampilkan notifikasi: _"Feedback Anda telah dikirim ke tim kami. Kami akan segera menghubungi Anda."_

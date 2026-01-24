@@ -8,6 +8,7 @@ export function HeroSection() {
           src="/logo.png"
           alt="PAM Techno Logo"
           fill
+          sizes="(max-width: 640px) 280px, (max-width: 1024px) 320px, 400px"
           className="object-contain object-center lg:object-left"
           priority
         />

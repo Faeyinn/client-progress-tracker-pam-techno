@@ -3,7 +3,8 @@ import { prisma } from "@/lib/prisma";
 
 export async function POST(request: Request) {
   try {
-    const { token } = await request.json();
+    const body = await request.json().catch(() => ({}));
+    const token = typeof body?.token === "string" ? body.token.trim() : "";
 
     if (!token) {
       return NextResponse.json(
@@ -17,17 +18,19 @@ export async function POST(request: Request) {
     });
 
     if (project) {
-      return NextResponse.json({ valid: true, projectId: project.id });
+      return NextResponse.json({ valid: true });
     } else {
       return NextResponse.json(
-        { message: "Token tidak valid" },
+        { valid: false, message: "Token tidak valid" },
         { status: 404 },
       );
     }
   } catch (error) {
+    console.error("Validate token error:", error);
     return NextResponse.json(
       { message: "Terjadi kesalahan server" },
       { status: 500 },
     );
   }
 }
+

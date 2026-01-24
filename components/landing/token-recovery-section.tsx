@@ -44,7 +44,22 @@ export function TokenRecoverySection() {
         body: JSON.stringify({ phone: normalizedPhone }),
       });
 
-      if (response.ok) {
+      const data: unknown = await response.json().catch(() => ({}));
+      const dataObject =
+        typeof data === "object" && data !== null
+          ? (data as Record<string, unknown>)
+          : null;
+
+      const success = dataObject && typeof dataObject.success === "boolean"
+        ? dataObject.success
+        : true;
+
+      const message =
+        dataObject && typeof dataObject.message === "string"
+          ? dataObject.message
+          : undefined;
+
+      if (response.ok && success) {
         setRecoverySuccess(true);
         setPhoneNumber("");
         setTimeout(() => {
@@ -52,12 +67,9 @@ export function TokenRecoverySection() {
           setRecoverySuccess(false);
         }, 3000);
       } else {
-        const data = await response.json();
-        setRecoveryError(
-          data.message || "Nomor tidak terdaftar dalam sistem kami.",
-        );
+        setRecoveryError(message || "Nomor tidak terdaftar dalam sistem kami.");
       }
-    } catch (err) {
+    } catch {
       setRecoveryError("Terjadi kesalahan. Silakan coba lagi.");
     } finally {
       setIsSendingRecovery(false);
@@ -69,7 +81,7 @@ export function TokenRecoverySection() {
       <CardContent className="pt-6">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="flex items-start space-x-3 flex-1">
-            <HelpCircle className="w-5 h-5 sm:w-6 sm:h-6 text-foreground flex-shrink-0 mt-0.5" />
+            <HelpCircle className="w-5 h-5 sm:w-6 sm:h-6 text-foreground shrink-0 mt-0.5" />
             <div>
               <p className="font-semibold text-foreground text-sm sm:text-base">
                 Lupa Token atau Link Hilang?

@@ -29,7 +29,7 @@ export function useLogin() {
       } else {
         setError(data.message || "Kredensial tidak valid.");
       }
-    } catch (err) {
+    } catch {
       setError("Terjadi kesalahan. Silakan coba lagi.");
     } finally {
       setIsLoading(false);

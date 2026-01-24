@@ -22,21 +22,34 @@ export function ProjectActions({ projectId, onDelete }: ProjectActionsProps) {
   return (
     <div className="flex items-center gap-2">
       <Link href={`/admin/projects/${projectId}/edit`}>
-        <Button variant="outline">
+        <Button variant="outline" size="sm" className="hidden sm:flex">
           <Edit className="w-4 h-4 mr-2" />
           Edit
+        </Button>
+        <Button variant="outline" size="icon" className="sm:hidden h-9 w-9">
+          <Edit className="w-4 h-4" />
         </Button>
       </Link>
 
       <AlertDialog>
         <AlertDialogTrigger asChild>
-          <Button
-            variant="outline"
-            className="text-red-600 hover:bg-red-50 hover:text-red-700 border-red-200 hover:border-red-300"
-          >
-            <Trash2 className="w-4 h-4 mr-2" />
-            Hapus
-          </Button>
+          <div>
+            <Button
+              variant="outline"
+              size="sm"
+              className="hidden sm:flex text-destructive hover:bg-destructive/10 hover:text-destructive border-destructive/30 hover:border-destructive/50"
+            >
+              <Trash2 className="w-4 h-4 mr-2" />
+              Hapus
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              className="sm:hidden h-9 w-9 text-destructive hover:bg-destructive/10 hover:text-destructive border-destructive/30 hover:border-destructive/50"
+            >
+              <Trash2 className="w-4 h-4" />
+            </Button>
+          </div>
         </AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -50,7 +63,7 @@ export function ProjectActions({ projectId, onDelete }: ProjectActionsProps) {
             <AlertDialogCancel>Batal</AlertDialogCancel>
             <AlertDialogAction
               onClick={onDelete}
-              className="bg-red-600 hover:bg-red-700 text-white border-none"
+              className="bg-foreground hover:bg-foreground/90 text-background border-none"
             >
               Ya, Hapus
             </AlertDialogAction>

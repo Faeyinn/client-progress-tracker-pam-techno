@@ -2,14 +2,14 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { Project, ProjectLog } from "@/lib/types/project";
+import { ClientFeedback, Project, ProjectLog } from "@/lib/types/project";
 import { toast } from "sonner";
 
 export function useProjectDetail(projectId: string) {
   const router = useRouter();
   const [project, setProject] = useState<Project | null>(null);
   const [logs, setLogs] = useState<ProjectLog[]>([]);
-  const [feedbacks, setFeedbacks] = useState<any[]>([]); // Use appropriate type if available, assume any[] for now or define a Feedback type
+  const [feedbacks, setFeedbacks] = useState<ClientFeedback[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [copied, setCopied] = useState(false);
@@ -34,7 +34,8 @@ export function useProjectDetail(projectId: string) {
       } else {
         setError("Gagal memuat data proyek");
       }
-    } catch (err) {
+    } catch (error) {
+      console.error("Failed to fetch project detail:", error);
       setError("Terjadi kesalahan saat memuat data");
     } finally {
       setIsLoading(false);
@@ -69,7 +70,8 @@ export function useProjectDetail(projectId: string) {
       } else {
         toast.error("Gagal menghapus proyek");
       }
-    } catch (err) {
+    } catch (error) {
+      console.error("Failed to delete project:", error);
       toast.error("Terjadi kesalahan");
     }
   };

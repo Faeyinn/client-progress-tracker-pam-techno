@@ -22,7 +22,8 @@ export function useDashboardLogic() {
       } else {
         setError("Gagal memuat data proyek");
       }
-    } catch (err) {
+    } catch (error) {
+      console.error("Failed to fetch projects:", error);
       setError("Terjadi kesalahan saat memuat data");
     } finally {
       setIsLoading(false);
@@ -42,7 +43,8 @@ export function useDashboardLogic() {
       } else {
         toast.error("Gagal menghapus proyek");
       }
-    } catch (err) {
+    } catch (error) {
+      console.error("Failed to delete project:", error);
       toast.error("Terjadi kesalahan");
     }
   }, []);

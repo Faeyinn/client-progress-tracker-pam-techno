@@ -1,13 +1,16 @@
 "use client";
 
+import * as React from "react";
 import { useLogin } from "@/components/admin/login/hooks/use-login";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Loader2, ArrowRight } from "lucide-react";
+import { ArrowRight, Eye, EyeOff, Loader2 } from "lucide-react";
 
 export function LoginForm() {
+  const [isPasswordVisible, setIsPasswordVisible] = React.useState(false);
+
   const {
     username,
     setUsername,
@@ -48,6 +51,10 @@ export function LoginForm() {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             className="h-11 bg-background"
+            autoComplete="username"
+            autoCapitalize="none"
+            spellCheck={false}
+            enterKeyHint="next"
             required
             disabled={isLoading}
           />
@@ -56,17 +63,40 @@ export function LoginForm() {
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <Label htmlFor="password">Password</Label>
+            <a
+              href="mailto:fajar.saputra2907@gmail.com?subject=Admin%20Login%20Help"
+              className="touch-target inline-flex items-center justify-center px-2 text-sm text-muted-foreground hover:text-primary transition-colors underline-offset-4 hover:underline"
+            >
+              Lupa password?
+            </a>
           </div>
-          <Input
-            id="password"
-            type="password"
-            placeholder="••••••••"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="h-11 bg-background"
-            required
-            disabled={isLoading}
-          />
+
+          <div className="relative">
+            <Input
+              id="password"
+              type={isPasswordVisible ? "text" : "password"}
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="h-11 bg-background pr-12"
+              autoComplete="current-password"
+              enterKeyHint="go"
+              required
+              disabled={isLoading}
+            />
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              disabled={isLoading}
+              onClick={() => setIsPasswordVisible((value) => !value)}
+              aria-label={isPasswordVisible ? "Sembunyikan password" : "Tampilkan password"}
+              aria-pressed={isPasswordVisible}
+              className="touch-target absolute right-1 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+            >
+              {isPasswordVisible ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+            </Button>
+          </div>
         </div>
 
         <Button

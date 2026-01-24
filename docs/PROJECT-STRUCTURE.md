@@ -37,9 +37,9 @@ client-progress-tracker/
 │   │   │           └── route.ts           # ✅ GET /api/projects/[id]/feedbacks
 │   │   └── track/
 │   │       ├── validate/
-│   │       │   └── route.ts              # 🔲 POST /api/track/validate
+│   │       │   └── route.ts              # ✅ POST /api/track/validate
 │   │       ├── recovery/
-│   │       │   └── route.ts              # 🔲 POST /api/track/recovery
+│   │       │   └── route.ts              # ✅ POST /api/track/recovery
 │   │       └── [token]/
 │   │           ├── route.ts              # ✅ GET /api/track/[token]
 │   │           └── feedback/

@@ -1,21 +1,36 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { sendWhatsAppFonnte } from "@/lib/whatsapp";
+
+function normalizePhone(input: string): string {
+  let phone = input.replace(/\D/g, "");
+  if (phone.startsWith("0")) phone = "62" + phone.slice(1);
+  if (!phone.startsWith("62")) phone = "62" + phone;
+  return phone;
+}
+
+function isValidIndoWhatsApp(phone: string): boolean {
+  // Basic sanity check: 62 + 8..15 digits
+  return /^62\d{8,15}$/.test(phone);
+}
 
 export async function POST(request: Request) {
   try {
-    const { phone } = await request.json();
-
-    if (!phone) {
+    const body = await request.json().catch(() => ({}));
+    const rawPhone = typeof body?.phone === "string" ? body.phone : "";
+    if (!rawPhone) {
       return NextResponse.json(
         { message: "Nomor WhatsApp wajib diisi" },
         { status: 400 },
       );
     }
 
-    let searchPhone = phone.toString().replace(/\D/g, "");
-
-    if (searchPhone.startsWith("0")) {
-      searchPhone = "62" + searchPhone.substring(1);
+    const searchPhone = normalizePhone(rawPhone);
+    if (!isValidIndoWhatsApp(searchPhone)) {
+      return NextResponse.json(
+        { message: "Format nomor WhatsApp tidak valid" },
+        { status: 400 },
+      );
     }
 
     const projects = await prisma.project.findMany({
@@ -26,23 +41,45 @@ export async function POST(request: Request) {
     });
 
     if (projects.length === 0) {
-      return NextResponse.json(
-        { message: "Nomor WhatsApp tidak terdaftar dalam sistem kami." },
-        { status: 404 },
-      );
+      // Returning 200 avoids noisy "Failed to load resource" logs for a user-input case.
+      return NextResponse.json({
+        success: false,
+        message: "Nomor WhatsApp tidak terdaftar dalam sistem kami.",
+      });
     }
 
-    // TODO: Implement Fonnte API or other WhatsApp Gateway here
-    // For now, we mock the success response.
-    // In a real app, you would generate a message with the token(s) and send it.
+    const origin = request.headers.get("origin") || new URL(request.url).origin;
+    const links = projects.map((p) => ({
+      projectName: p.projectName,
+      url: `${origin}/track/${p.uniqueToken}`,
+    }));
 
-    // const message = `Halo ${projects[0].clientName}, berikut adalah token proyek Anda:\n` +
-    //   projects.map(p => `- ${p.projectName}: ${process.env.NEXT_PUBLIC_APP_URL}/track/${p.uniqueToken}`).join('\n');
-    // await sendWhatsApp(searchPhone, message);
+    const clientName = projects[0]?.clientName || "";
+    const lines = [
+      `Halo *${clientName ? clientName : ""}*! Berikut link tracking proyek Anda:`,
+      ...links.map((l) => `- ${l.projectName}: ${l.url}`),
+      "\nJika Anda merasa tidak meminta ini, abaikan pesan ini.",
+    ];
+    const message = lines.join("\n");
 
-    console.log(
-      `[Validation Mock] Recovery requested for ${searchPhone}. Found ${projects.length} projects.`,
-    );
+    const sendResult = await sendWhatsAppFonnte({ to: searchPhone, message });
+    if (!sendResult.ok) {
+      console.error("WhatsApp recovery send failed:", sendResult);
+
+      // Developer-friendly fallback in non-production.
+      if (process.env.NODE_ENV !== "production") {
+        return NextResponse.json({
+          success: true,
+          message: "(DEV) WhatsApp gateway belum dikonfigurasi. Link recovery disediakan di response.",
+          debug: { phone: searchPhone, links },
+        });
+      }
+
+      return NextResponse.json(
+        { message: "Gagal mengirim WhatsApp. Silakan coba lagi." },
+        { status: 502 },
+      );
+    }
 
     return NextResponse.json({
       success: true,

@@ -8,10 +8,9 @@ datasource db {
 }
 
 model User {
-  id       String @id @default(cuid())
-  username String @unique
-  password String
-
+  id        String   @id @default(cuid())
+  username  String   @unique
+  password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -19,19 +18,17 @@ model User {
 }
 
 model Project {
-  id           String   @id @default(cuid())
-  clientName   String   @map("client_name")
-  clientPhone  String   @map("client_phone")
-  projectName  String   @map("project_name")
-  uniqueToken  String   @unique @map("unique_token") @default(cuid())
-  deadline     DateTime
-  status       String   @default("On Progress")
-  
-  createdAt    DateTime @default(now()) @map("created_at")
-  updatedAt    DateTime @updatedAt @map("updated_at")
-
-  logs         ProjectLog[]
-  feedbacks    ClientFeedback[]
+  id          String           @id @default(cuid())
+  clientName  String           @map("client_name")
+  clientPhone String           @map("client_phone")
+  projectName String           @map("project_name")
+  uniqueToken String           @unique @default(cuid()) @map("unique_token")
+  deadline    DateTime
+  status      String           @default("On Progress")
+  createdAt   DateTime         @default(now()) @map("created_at")
+  updatedAt   DateTime         @updatedAt @map("updated_at")
+  feedbacks   ClientFeedback[]
+  logs        ProjectLog[]
 
   @@index([uniqueToken])
   @@index([clientPhone])
@@ -41,12 +38,10 @@ model Project {
 model ProjectLog {
   id          String   @id @default(cuid())
   projectId   String   @map("project_id")
-  title       String   
-  description String   @db.Text
-  percentage  Int      
-  
+  title       String
+  description String
+  percentage  Int
   createdAt   DateTime @default(now()) @map("created_at")
-
   project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
   @@index([projectId])
@@ -56,10 +51,8 @@ model ProjectLog {
 model ClientFeedback {
   id        String   @id @default(cuid())
   projectId String   @map("project_id")
-  message   String   @db.Text
-  
+  message   String
   createdAt DateTime @default(now()) @map("created_at")
-
   project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
   @@index([projectId])

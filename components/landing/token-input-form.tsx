@@ -58,7 +58,7 @@ export function TokenInputForm() {
           "Token tidak ditemukan. Periksa kembali atau gunakan fitur recovery.",
         );
       }
-    } catch (err) {
+    } catch {
       setTokenError("Terjadi kesalahan. Silakan coba lagi.");
     } finally {
       setIsValidating(false);
@@ -86,18 +86,30 @@ export function TokenInputForm() {
         body: JSON.stringify({ phone: normalizedPhone }),
       });
 
-      if (response.ok) {
+      const data: unknown = await response.json().catch(() => ({}));
+      const dataObject =
+        typeof data === "object" && data !== null
+          ? (data as Record<string, unknown>)
+          : null;
+
+      const success = dataObject && typeof dataObject.success === "boolean"
+        ? dataObject.success
+        : true;
+
+      const message =
+        dataObject && typeof dataObject.message === "string"
+          ? dataObject.message
+          : undefined;
+
+      if (response.ok && success) {
         setRecoverySuccess(true);
         setPhoneNumber("");
         // Optional: Close dialog after delay
         // setTimeout(() => setShowRecoveryDialog(false), 3000);
       } else {
-        const data = await response.json();
-        setRecoveryError(
-          data.message || "Nomor tidak terdaftar dalam sistem kami.",
-        );
+        setRecoveryError(message || "Nomor tidak terdaftar dalam sistem kami.");
       }
-    } catch (err) {
+    } catch {
       setRecoveryError("Terjadi kesalahan. Silakan coba lagi.");
     } finally {
       setIsSendingRecovery(false);
@@ -182,7 +194,7 @@ export function TokenInputForm() {
                   Kirim ulang via WhatsApp
                 </button>
               </DialogTrigger>
-              <DialogContent className="sm:max-w-[425px]">
+              <DialogContent className="sm:max-w-106.25">
                 <DialogHeader>
                   <DialogTitle className="text-xl">Recovery Token</DialogTitle>
                   <DialogDescription>

@@ -4,7 +4,7 @@ import { LoginForm } from "@/components/admin/login/login-form";
 
 export default function AdminLoginPage() {
   return (
-    <div className="w-full min-h-screen lg:grid lg:grid-cols-2">
+    <div className="w-full min-h-dvh lg:min-h-screen lg:grid lg:grid-cols-2">
       {/* Left Side - Branding & Visuals */}
       <div className="hidden lg:flex flex-col justify-between bg-primary text-primary-foreground p-10 relative overflow-hidden">
         {/* Background Pattern */}
@@ -34,7 +34,13 @@ export default function AdminLoginPage() {
         {/* Logo */}
         <div className="relative z-10 flex items-center gap-0">
           <div className="relative w-12 h-12">
-            <Image src="/logo-pure.png" alt="Logo" fill className="object-contain" />
+            <Image
+              src="/logo-pure.png"
+              alt="Logo"
+              fill
+              sizes="48px"
+              className="object-contain"
+            />
           </div>
           <span className="ml-4 text-xl font-bold tracking-tight">
             PAM Techno Admin
@@ -60,15 +66,16 @@ export default function AdminLoginPage() {
       </div>
 
       {/* Right Side - Login Form */}
-      <div className="flex items-center justify-center p-6 sm:p-12 bg-background relative">
-        <div className="w-full max-w-[400px] space-y-6">
+      <div className="flex min-h-dvh items-start justify-center bg-background px-4 py-8 sm:px-6 sm:py-12 lg:min-h-screen lg:items-center lg:px-12 relative overflow-y-auto lg:overflow-visible">
+        <div className="w-full max-w-100 space-y-6 pb-[calc(2rem+env(safe-area-inset-bottom))]">
           {/* Mobile Logo (Visible only on lg and below) */}
-          <div className="lg:hidden flex flex-col items-center space-y-2 mb-8 animate-in fade-in slide-in-from-top-4">
+          <div className="lg:hidden flex flex-col items-center space-y-2 mb-6 sm:mb-8 animate-in fade-in slide-in-from-top-4">
             <div className="relative w-16 h-16">
               <Image
-                src="/logo.png"
+                src="/logo-pure.png"
                 alt="Logo"
                 fill
+                sizes="64px"
                 className="object-contain"
               />
             </div>

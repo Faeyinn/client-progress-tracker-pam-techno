@@ -40,7 +40,7 @@ export function useAddLog(projectId: string, onSuccess: () => void) {
       } else {
         toast.error("Gagal menambahkan log");
       }
-    } catch (err) {
+    } catch {
       toast.error("Terjadi kesalahan");
     } finally {
       setIsSubmitting(false);

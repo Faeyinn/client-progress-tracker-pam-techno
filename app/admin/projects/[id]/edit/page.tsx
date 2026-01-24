@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -18,11 +18,7 @@ export default function EditProjectPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    fetchProject();
-  }, [projectId]);
-
-  const fetchProject = async () => {
+  const fetchProject = useCallback(async () => {
     try {
       const response = await fetch(`/api/projects/${projectId}`);
       if (response.ok) {
@@ -31,12 +27,16 @@ export default function EditProjectPage() {
       } else {
         setError("Gagal memuat data proyek");
       }
-    } catch (err) {
+    } catch {
       setError("Terjadi kesalahan saat memuat data");
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [projectId]);
+
+  useEffect(() => {
+    fetchProject();
+  }, [fetchProject]);
 
   if (isLoading) {
     return (

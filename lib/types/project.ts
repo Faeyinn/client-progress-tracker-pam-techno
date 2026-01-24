@@ -19,6 +19,13 @@ export interface ProjectLog {
   createdAt: string;
 }
 
+export interface ClientFeedback {
+  id: string;
+  projectId: string;
+  message: string;
+  createdAt: string;
+}
+
 export interface DashboardStats {
   total: number;
   onProgress: number;

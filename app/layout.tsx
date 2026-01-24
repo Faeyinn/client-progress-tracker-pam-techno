@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
+import { ThemeProvider } from "next-themes";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,7 +32,7 @@ export const metadata: Metadata = {
   authors: [{ name: "PAM Techno Team" }],
   creator: "PAM Techno",
   publisher: "PAM Techno",
-  metadataBase: new URL("https://pamtechno.com"), // Ganti dengan domain asli nanti
+  metadataBase: new URL("https://pamtechno.com"),
   openGraph: {
     title: "PAM Techno - Client Progress Tracker",
     description:
@@ -58,12 +59,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="id" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
-        <Toaster />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange={false}
+        >
+          {children}
+          <Toaster
+            position="bottom-right"
+            toastOptions={{
+              className: "border-border bg-card text-card-foreground",
+            }}
+          />
+        </ThemeProvider>
       </body>
     </html>
   );

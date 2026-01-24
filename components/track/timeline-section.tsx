@@ -1,14 +1,7 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { FolderKanban, History } from "lucide-react";
 import { TimelineItem } from "../admin/projects/detail/timeline-item";
 import { ProjectLog } from "@/lib/types/project";
-import { cn } from "@/lib/utils";
 
 interface TimelineSectionProps {
   logs: ProjectLog[];
@@ -18,7 +11,7 @@ export function TimelineSection({ logs }: TimelineSectionProps) {
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-3 mb-6">
-        <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center text-white shadow-md">
+        <div className="w-10 h-10 rounded-full bg-foreground flex items-center justify-center text-background shadow-md">
           <History className="w-5 h-5" />
         </div>
         <div>
@@ -48,7 +41,7 @@ export function TimelineSection({ logs }: TimelineSectionProps) {
       ) : (
         <div className="relative pl-4 sm:pl-8">
           {/* Main Connector Line - Changed to Black/Zinc */}
-          <div className="absolute left-[31px] sm:left-[47px] top-4 bottom-10 w-0.5 bg-zinc-200 hidden md:block" />
+          <div className="absolute left-[31px] sm:left-[47px] top-4 bottom-10 w-0.5 bg-border hidden md:block" />
 
           <div className="space-y-10">
             {logs.map((log, index) => (
@@ -57,7 +50,7 @@ export function TimelineSection({ logs }: TimelineSectionProps) {
                 className="relative z-10 transition-all duration-500 animate-in slide-in-from-bottom-4"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
-                <TimelineItem log={log} isLatest={index === 0} />
+                <TimelineItem log={log} isLatest={index === 0} index={0} />
               </div>
             ))}
           </div>
