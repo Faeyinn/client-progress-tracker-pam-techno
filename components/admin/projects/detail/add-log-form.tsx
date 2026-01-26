@@ -33,7 +33,6 @@ export function AddLogForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      {/* Title Input */}
       <div className="space-y-2">
         <Label htmlFor="title" className="text-sm font-medium">
           Judul Tahapan <span className="text-destructive">*</span>
@@ -52,7 +51,6 @@ export function AddLogForm({
         </div>
       </div>
 
-      {/* Description Input */}
       <div className="space-y-2">
         <Label htmlFor="description" className="text-sm font-medium">
           Deskripsi <span className="text-destructive">*</span>
