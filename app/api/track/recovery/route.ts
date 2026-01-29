@@ -55,10 +55,21 @@ export async function POST(request: Request) {
     }));
 
     const clientName = projects[0]?.clientName || "";
+
+    // Updated Professional Message Template
     const lines = [
-      `Halo *${clientName ? clientName : ""}*! Berikut link tracking proyek Anda:`,
-      ...links.map((l) => `- ${l.projectName}: ${l.url}`),
-      "\nJika Anda merasa tidak meminta ini, abaikan pesan ini.",
+      `Halo, *${clientName ? clientName : "Klien"}*! 👋`,
+      "",
+      "Berikut adalah tautan untuk memantau progres proyek Anda di *PAM Techno*:",
+      "",
+      ...links.map((l) => `🔹 *${l.projectName}*\n${l.url}`),
+      "",
+      "🔒 *Keamanan:* Tautan ini bersifat pribadi. Mohon untuk tidak membagikannya kepada pihak lain.",
+      "",
+      "Terima kasih telah mempercayakan proyek Anda kepada kami.",
+      "",
+      "Salam,",
+      "*PAM Techno Team*",
     ];
     const message = lines.join("\n");
 
@@ -66,12 +77,13 @@ export async function POST(request: Request) {
     if (!sendResult.ok) {
       console.error("WhatsApp recovery send failed:", sendResult);
 
-      // Developer-friendly fallback in non-production.
+      // Developer-friendly fallback in non-production or for debugging
       if (process.env.NODE_ENV !== "production") {
         return NextResponse.json({
           success: true,
-          message: "(DEV) WhatsApp gateway belum dikonfigurasi. Link recovery disediakan di response.",
-          debug: { phone: searchPhone, links },
+          message:
+            "(DEV) WhatsApp gateway belum dikonfigurasi. Link recovery disediakan di response.",
+          debug: { phone: searchPhone, links, message },
         });
       }
 

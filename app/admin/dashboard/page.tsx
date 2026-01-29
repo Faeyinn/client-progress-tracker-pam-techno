@@ -1,34 +1,28 @@
 "use client";
 
 import { useEffect } from "react";
-import { NewProjectModal } from "@/components/admin/dashboard/new-project-modal";
 import { DashboardHeader } from "@/components/admin/dashboard/dashboard-header";
 import {
   StatsCards,
   StatsCardsSkeleton,
 } from "@/components/admin/dashboard/stats-cards";
-import { ProjectFilters } from "@/components/admin/dashboard/project-filters";
-import { ProjectTable } from "@/components/admin/dashboard/project-table";
 import { useDashboardLogic } from "@/components/admin/dashboard/hooks/use-dashboard";
 import { BottomNav } from "@/components/admin/shared/bottom-nav";
 import { Button } from "@/components/ui/button";
-import { RefreshCcw, LayoutDashboard } from "lucide-react";
+import { RefreshCcw, LayoutDashboard, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { RecentProjectsWidget } from "@/components/admin/dashboard/recent-projects-widget";
+import { NewProjectModal } from "@/components/admin/dashboard/new-project-modal";
+
+import {
+  CursorCard,
+  CursorCardsContainer,
+} from "@/components/anim/cursor-cards";
+import { ProjectChart } from "@/components/admin/dashboard/project-chart";
+import { RecentActivity } from "@/components/admin/dashboard/recent-activity";
 
 export default function AdminDashboardPage() {
-  const {
-    projects,
-    filteredProjects,
-    isLoading,
-    error,
-    searchQuery,
-    setSearchQuery,
-    statusFilter,
-    setStatusFilter,
-    fetchProjects,
-    handleDelete,
-    stats,
-  } = useDashboardLogic();
+  const { projects, isLoading, fetchProjects, stats } = useDashboardLogic();
 
   // Initial fetch
   useEffect(() => {
@@ -36,121 +30,91 @@ export default function AdminDashboardPage() {
   }, [fetchProjects]);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 transition-colors duration-500">
       <DashboardHeader />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 pb-24 md:pb-8">
-        {/* Page Header */}
-        <div className="flex flex-col gap-1 mb-4 sm:mb-6">
-          <div className="flex items-center gap-3">
-            <div className="hidden sm:flex h-10 w-10 rounded-xl bg-foreground/5 items-center justify-center">
-              <LayoutDashboard className="w-5 h-5 text-foreground" />
-            </div>
-            <div>
-              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
-                Dashboard
-              </h1>
-              <p className="text-sm sm:text-base text-muted-foreground">
-                Ringkasan performa dan kontrol proyek.
-              </p>
-            </div>
-          </div>
-        </div>
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12 pb-24 md:pb-12 space-y-8">
+        {/* Page Header - Ultra Compact */}
+        <CursorCardsContainer>
+          <CursorCard
+            surfaceClassName="bg-white dark:bg-zinc-900"
+            className="rounded-[1.25rem] shadow-lg shadow-zinc-200/50 dark:shadow-none animate-in fade-in slide-in-from-bottom-4 duration-700"
+            primaryHue="#E4E4E7" // Zinc 200
+            secondaryHue="#52525B" // Zinc 600
+            borderColor="#F4F4F5" // Zinc 100
+            illuminationColor="#FFFFFF20"
+          >
+            <div className="flex flex-col gap-1 relative overflow-hidden p-3 sm:p-4">
+              <div className="absolute top-0 right-0 p-4 opacity-10 dark:opacity-[0.03]">
+                <LayoutDashboard className="w-24 h-24 text-foreground" />
+              </div>
 
-        {/* Stats Cards */}
-        {isLoading ? (
-          <StatsCardsSkeleton />
-        ) : (
-          <StatsCards stats={stats} isLoading={isLoading} />
-        )}
-
-        {/* Projects Section - Clean Layout */}
-        <section className="border border-border/50 rounded-xl bg-card shadow-sm overflow-hidden">
-          {/* Header with filters integrated */}
-          <div className="px-4 py-3 border-b border-border/50 bg-muted/30">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-              {/* Title */}
-              <div className="flex items-center gap-3">
-                <div>
-                  <h2 className="text-lg font-semibold text-foreground">
-                    Daftar Proyek
-                  </h2>
-                  <p className="text-xs text-muted-foreground hidden sm:block">
-                    Kelola dan pantau semua proyek
+              <div className="flex items-center gap-4 relative z-10">
+                <div className="hidden sm:flex h-10 w-10 rounded-lg bg-gradient-to-br from-zinc-900 to-zinc-800 dark:from-zinc-100 dark:to-zinc-300 text-white dark:text-zinc-950 items-center justify-center shadow-md shadow-zinc-900/20">
+                  <LayoutDashboard className="w-5 h-5" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-0.5">
+                    Admin Console
+                  </p>
+                  <h1 className="text-xl sm:text-2xl font-black tracking-tighter text-foreground uppercase leading-[0.9]">
+                    DASHBOARD
+                    <span className="text-primary/40">.</span>
+                  </h1>
+                  <p className="text-[10px] sm:text-xs text-muted-foreground/80 font-medium tracking-wide mt-0.5 max-w-xl leading-relaxed">
+                    Ringkasan performa sistem.
                   </p>
                 </div>
               </div>
-
-              {/* Actions */}
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="h-8 px-3 text-xs"
-                  onClick={fetchProjects}
-                  disabled={isLoading}
-                >
-                  <RefreshCcw
-                    className={cn(
-                      "w-3.5 h-3.5 mr-1.5",
-                      isLoading && "animate-spin",
-                    )}
-                  />
-                  Refresh
-                </Button>
-                <div className="hidden md:block">
-                  <NewProjectModal onSuccess={fetchProjects} />
-                </div>
-              </div>
             </div>
+          </CursorCard>
+        </CursorCardsContainer>
+
+        {/* Stats Cards Section */}
+        <div className="animate-in fade-in slide-in-from-bottom-8 duration-700 delay-150">
+          {isLoading ? (
+            <StatsCardsSkeleton />
+          ) : (
+            <StatsCards stats={stats} isLoading={isLoading} />
+          )}
+        </div>
+
+        {/* Grid Layout for Charts, Activity, and Recent Projects */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+          {/* Chart Section - Takes 2 cols */}
+          <div className="lg:col-span-2 animate-in fade-in slide-in-from-bottom-10 duration-700 delay-200">
+            <ProjectChart projects={projects} />
           </div>
 
-          {/* Filters - No extra padding */}
-          <div className="px-4 py-2.5 border-b border-border/30 bg-card sticky top-16 z-40 backdrop-blur-md">
-            <ProjectFilters
-              searchQuery={searchQuery}
-              setSearchQuery={setSearchQuery}
-              statusFilter={statusFilter}
-              setStatusFilter={setStatusFilter}
-              resultCount={filteredProjects.length}
-              totalCount={projects.length}
-              onReset={() => {
-                setSearchQuery("");
-                setStatusFilter("all");
-              }}
-            />
+          {/* Activity Section - Takes 1 col */}
+          <div className="animate-in fade-in slide-in-from-bottom-10 duration-700 delay-300 h-full">
+            <RecentActivity />
           </div>
 
-          {/* Table Content */}
-          <div className="px-4 pb-4">
-            <ProjectTable
-              projects={filteredProjects}
-              isLoading={isLoading}
-              error={error}
-              onDelete={handleDelete}
-            />
+          {/* Recent Projects Section - Row 2, Spans full width or maybe 2 cols if we want? Let's make it full width or 2 cols */}
+          {/* Let's put Recent Projects below Chart, spanning 2 cols. */}
+          <div className="lg:col-span-2 animate-in fade-in slide-in-from-bottom-12 duration-700 delay-400">
+            <RecentProjectsWidget projects={projects} isLoading={isLoading} />
           </div>
-        </section>
+        </div>
       </main>
 
       {/* Mobile Floating Refresh Button */}
       <Button
-        variant="outline"
+        variant="default"
         size="icon"
         className={cn(
-          "fixed bottom-20 right-4 z-40 md:hidden",
-          "h-12 w-12 rounded-full shadow-lg",
-          "bg-background/95 backdrop-blur-sm border-border/50",
-          "hover:bg-muted active:scale-95 transition-all",
+          "fixed bottom-24 right-6 z-40 md:hidden",
+          "h-14 w-14 rounded-2xl shadow-2xl shadow-primary/30",
+          "hover:scale-110 active:scale-90 transition-all duration-300",
         )}
         onClick={fetchProjects}
         disabled={isLoading}
         aria-label="Refresh data"
       >
-        <RefreshCcw className={cn("w-5 h-5", isLoading && "animate-spin")} />
+        <RefreshCcw className={cn("w-6 h-6", isLoading && "animate-spin")} />
       </Button>
 
-      {/* Mobile Bottom Navigation */}
       <BottomNav onProjectCreated={fetchProjects} />
     </div>
   );

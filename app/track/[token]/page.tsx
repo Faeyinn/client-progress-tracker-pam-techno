@@ -3,37 +3,31 @@
 import { useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Loader2, AlertCircle } from "lucide-react";
+import { AlertCircle } from "lucide-react";
 import { TrackHeader } from "@/components/track/track-header";
 import { ProjectHeaderCard } from "@/components/track/project-header-card";
 import { TimelineSection } from "@/components/track/timeline-section";
 import { FeedbackForm } from "@/components/track/feedback-form";
 import { ContactFooter } from "@/components/track/contact-footer";
 import { useTracking } from "@/components/track/hooks/use-tracking";
+import { ProgressUpdatesFeed } from "@/components/track/hub/progress-updates-feed";
+import { DiscussionArchiveViewer } from "@/components/track/hub/discussion-archive-viewer";
 
 export default function TrackPage() {
   const params = useParams();
   const token = params.token as string;
 
-  const { project, logs, isLoading, error, latestProgress } =
-    useTracking(token);
+  const {
+    project,
+    logs,
+    artifacts,
+    updates,
+    isLoading,
+    error,
+    latestProgress,
+  } = useTracking(token);
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <div className="relative w-16 h-16 mx-auto">
-            <Loader2 className="w-full h-full animate-spin text-primary" />
-          </div>
-          <p className="text-muted-foreground font-medium animate-pulse">
-            Memuat data proyek...
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  if (error || !project) {
+  if (error || (!project && !isLoading)) {
     return (
       <div className="min-h-screen bg-muted/10 flex items-center justify-center p-4">
         <Card className="max-w-md w-full border border-border/60 shadow-lg bg-card text-card-foreground">
@@ -64,24 +58,49 @@ export default function TrackPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-12">
       <TrackHeader />
 
-      <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
-        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-          <ProjectHeaderCard
-            project={project}
-            latestProgress={latestProgress}
-          />
-        </div>
-        <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-150">
-          <TimelineSection logs={logs} />
-        </div>
-        <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
-          <FeedbackForm token={token} />
-        </div>
-        <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-500">
-          <ContactFooter />
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+          {/* Main Content Column */}
+          <div className="lg:col-span-8 space-y-10 lg:space-y-12">
+            <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+              <ProjectHeaderCard
+                project={project}
+                latestProgress={latestProgress}
+                isLoading={isLoading}
+              />
+            </div>
+
+            <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-150">
+              <ProgressUpdatesFeed updates={updates} isLoading={isLoading} />
+            </div>
+
+            <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200">
+              <DiscussionArchiveViewer
+                artifacts={artifacts}
+                isLoading={isLoading}
+              />
+            </div>
+
+            <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-250">
+              <TimelineSection logs={logs} isLoading={isLoading} />
+            </div>
+          </div>
+
+          {/* Sidebar Column - Sticky on Desktop */}
+          <div className="lg:col-span-4 space-y-8">
+            <div className="lg:sticky lg:top-24 space-y-8 animate-in fade-in slide-in-from-right-4 duration-700 delay-300">
+              <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
+                <FeedbackForm token={token} />
+              </div>
+
+              <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-500">
+                <ContactFooter />
+              </div>
+            </div>
+          </div>
         </div>
       </main>
     </div>

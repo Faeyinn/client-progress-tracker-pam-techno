@@ -5,13 +5,18 @@ export function proxy(request: NextRequest) {
   const adminSession = request.cookies.get("admin_session");
   const isLoginPage = request.nextUrl.pathname === "/admin/login";
   const isAdminRoute = request.nextUrl.pathname.startsWith("/admin");
+  const isAdminApiRoute =
+    request.nextUrl.pathname === "/api/projects" ||
+    request.nextUrl.pathname.startsWith("/api/projects/");
 
-  // Jika user mengakses halaman admin (selain login) tapi tidak punya session/cookie
   if (isAdminRoute && !isLoginPage && !adminSession) {
     return NextResponse.redirect(new URL("/admin/login", request.url));
   }
 
-  // Jika user mengakses halaman login tapi sudah punya session valid
+  if (isAdminApiRoute && !adminSession) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
+
   if (isLoginPage && adminSession) {
     return NextResponse.redirect(new URL("/admin/dashboard", request.url));
   }
@@ -20,5 +25,5 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*"],
+  matcher: ["/admin/:path*", "/api/projects/:path*"],
 };

@@ -21,6 +21,7 @@ interface ProjectFiltersProps {
   resultCount: number;
   totalCount: number;
   onReset: () => void;
+  hideStatusDropdown?: boolean;
 }
 
 export function ProjectFilters({
@@ -31,6 +32,7 @@ export function ProjectFilters({
   resultCount,
   totalCount,
   onReset,
+  hideStatusDropdown = false,
 }: ProjectFiltersProps) {
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const hasFilters = searchQuery.trim().length > 0 || statusFilter !== "all";
@@ -122,24 +124,26 @@ export function ProjectFilters({
         </div>
 
         {/* Status Filter */}
-        <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger
-            className={cn(
-              "w-[140px] h-9",
-              statusFilter !== "all" && "border-primary",
-            )}
-          >
-            <div className="flex items-center gap-1.5">
-              <Filter className="w-3.5 h-3.5" />
-              <SelectValue placeholder="Status" />
-            </div>
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">Semua</SelectItem>
-            <SelectItem value="On Progress">On Progress</SelectItem>
-            <SelectItem value="Done">Selesai</SelectItem>
-          </SelectContent>
-        </Select>
+        {!hideStatusDropdown && (
+          <Select value={statusFilter} onValueChange={setStatusFilter}>
+            <SelectTrigger
+              className={cn(
+                "w-[140px] h-9",
+                statusFilter !== "all" && "border-primary",
+              )}
+            >
+              <div className="flex items-center gap-1.5">
+                <Filter className="w-3.5 h-3.5" />
+                <SelectValue placeholder="Status" />
+              </div>
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Semua</SelectItem>
+              <SelectItem value="On Progress">On Progress</SelectItem>
+              <SelectItem value="Done">Selesai</SelectItem>
+            </SelectContent>
+          </Select>
+        )}
 
         {/* Reset */}
         <Button

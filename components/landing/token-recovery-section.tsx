@@ -116,9 +116,9 @@ export function TokenRecoverySection() {
               </DialogHeader>
               <form onSubmit={handleRecoverySubmit} className="space-y-4">
                 {recoverySuccess && (
-                  <Alert className="bg-green-50 border-green-200 animate-in fade-in slide-in-from-top-2">
-                    <CheckCircle className="h-4 w-4 text-green-600" />
-                    <AlertDescription className="text-green-800">
+                  <Alert className="border-border/70 bg-muted/30 animate-in fade-in slide-in-from-top-2">
+                    <CheckCircle className="h-4 w-4 text-foreground" />
+                    <AlertDescription className="text-foreground">
                       Link telah dikirim ke WhatsApp Anda. Silakan cek HP.
                     </AlertDescription>
                   </Alert>
@@ -160,7 +160,7 @@ export function TokenRecoverySection() {
 
                 <Button
                   type="submit"
-                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm transition-all duration-200"
+                  className="w-full shadow-none transition-all duration-200"
                   disabled={isSendingRecovery || recoverySuccess}
                 >
                   {isSendingRecovery ? (

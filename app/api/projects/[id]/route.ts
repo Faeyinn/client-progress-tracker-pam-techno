@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { sendWhatsAppFonnte } from "@/lib/whatsapp";
+import { requireAdminSession } from "@/lib/api/admin";
 
 function normalizePhone(input: string): string {
   let phone = input.replace(/\D/g, "");
@@ -18,6 +19,7 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
+    await requireAdminSession();
     const resolvedParams = await params;
     const id = resolvedParams.id;
 
@@ -65,6 +67,7 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
+    await requireAdminSession();
     const resolvedParams = await params;
     const id = resolvedParams.id;
     const body = await request.json().catch(() => ({}));
@@ -117,9 +120,14 @@ export async function PUT(
         request.headers.get("origin") || new URL(request.url).origin;
       const magicLink = `${origin}/track/${updatedProject.uniqueToken}`;
       const message =
-        `Halo *${updatedProject.clientName}* !\n` +
-        `Nomor WhatsApp Anda telah diperbarui di sistem kami.\n\n` +
-        `Ini link tracking proyek Anda: ${magicLink}`;
+        `Halo, *${updatedProject.clientName}*! 👋\n\n` +
+        `Informasi kontak Anda telah berhasil diperbarui di sistem *PAM Techno*.\n\n` +
+        `🔗 **Akses Proyek Anda:**\n` +
+        `Gunakan tautan berikut untuk tetap memantau progres proyek Anda:\n` +
+        `${magicLink}\n\n` +
+        `Jika Anda tidak merasa melakukan perubahan ini, silakan hubungi kami segera.\n\n` +
+        `Salam,\n` +
+        `*PAM Techno Team*`;
 
       const sendResult = await sendWhatsAppFonnte({
         to: updatedProject.clientPhone,
@@ -128,6 +136,9 @@ export async function PUT(
 
       if (!sendResult.ok) {
         console.error("WhatsApp phone-update send failed:", sendResult);
+        if (process.env.NODE_ENV !== "production") {
+          console.log("DEV_MODE: WhatsApp phone update message:\n" + message);
+        }
       }
     }
 
@@ -146,6 +157,7 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
+    await requireAdminSession();
     const resolvedParams = await params;
     const id = resolvedParams.id;
 

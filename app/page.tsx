@@ -1,52 +1,74 @@
+import { Boxes } from "@/components/anim/background-boxes";
 import { HeroSection } from "@/components/landing/hero-section";
-import { TokenInputForm } from "@/components/landing/token-input-form";
+import Image from "next/image";
 import { LandingFooter } from "@/components/landing/landing-footer";
+import { FeatureHighlights } from "../components/landing/feature-highlights";
+import { AccessPanel } from "@/components/landing/access-panel";
+import { ScrollToAccessLink } from "@/components/landing/scroll-to-access-link";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { MoreVertical } from "lucide-react";
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen w-full flex flex-col items-center justify-center p-4 sm:p-8 bg-background overflow-hidden relative selection:bg-primary/10">
-      <div className="absolute top-4 right-4 z-20">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="rounded-full bg-background/60 backdrop-blur border border-border/50 hover:bg-background"
-              aria-label="Menu"
+    <div className="min-h-svh w-full relative overflow-hidden selection:bg-foreground selection:text-background">
+      <div className="fixed inset-0 w-full h-full overflow-hidden z-0">
+        <div className="absolute inset-0 w-full h-full bg-background z-20 [mask-image:radial-gradient(transparent,white)] pointer-events-none" />
+        <Boxes />
+      </div>
+
+      <div className="relative z-10 pointer-events-none">
+        <header className="fixed top-0 left-0 right-0 z-50 border-b border-border/40 bg-background/80 backdrop-blur-md transition-all duration-300 pointer-events-auto">
+          <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6 lg:px-8">
+            <Link href="/" className="flex items-center gap-2 group">
+              <div className="relative h-8 w-8 overflow-hidden transition-transform group-hover:scale-105">
+                <Image
+                  src="/logo-pure.png"
+                  alt="PAM Techno"
+                  fill
+                  sizes="32px"
+                  className="object-contain"
+                  priority
+                />
+              </div>
+              <span className="text-lg font-bold tracking-tight">
+                PAM Techno
+              </span>
+            </Link>
+
+            <nav className="flex items-center gap-4">
+              <Button
+                asChild
+                size="sm"
+                className="rounded-full px-5 font-medium shadow-sm"
+              >
+                <Link href="/admin/login">Admin</Link>
+              </Button>
+            </nav>
+          </div>
+        </header>
+
+        <main className="mx-auto w-full max-w-7xl px-6 lg:px-8 pt-24 sm:pt-32 pb-20">
+          <div className="grid lg:grid-cols-12 gap-16 lg:gap-8 items-center min-h-[calc(100vh-8rem)]">
+            <div className="lg:col-span-7 flex flex-col justify-center pointer-events-auto">
+              <HeroSection />
+            </div>
+
+            <aside
+              id="access"
+              className="lg:col-span-5 w-full max-w-md mx-auto lg:ml-auto lg:mr-0 scroll-mt-32 pointer-events-auto"
             >
-              <MoreVertical className="h-5 w-5" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-48">
-            <DropdownMenuItem asChild>
-              <Link href="/admin/login">Admin Access</Link>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
+              <AccessPanel />
+            </aside>
+          </div>
 
-      <div className="absolute inset-0 -z-10 h-full w-full bg-background bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px]">
-        <div className="absolute left-0 right-0 top-0 -z-10 m-auto h-77.5 w-77.5 rounded-full bg-primary/20 opacity-20 blur-[100px]"></div>
-      </div>
+          <div className="mt-24 sm:mt-32 pointer-events-auto">
+            <FeatureHighlights />
+          </div>
 
-      <div className="w-full max-w-6xl grid lg:grid-cols-2 gap-12 lg:gap-8 items-center z-10">
-        <div className="flex flex-col items-center lg:items-start space-y-6 text-center lg:text-left order-first p-4">
-          <HeroSection />
-        </div>
-
-        <div className="w-full max-w-md mx-auto lg:mx-0 lg:ml-auto space-y-6">
-          <TokenInputForm />
-          <LandingFooter />
-        </div>
+          <div className="mt-24 border-t border-border/40 pt-12 pointer-events-auto">
+            <LandingFooter />
+          </div>
+        </main>
       </div>
     </div>
   );

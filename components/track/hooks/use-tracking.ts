@@ -1,11 +1,18 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Project, ProjectLog } from "@/lib/types/project";
+import {
+  DiscussionArtifact,
+  ProgressUpdate,
+  Project,
+  ProjectLog,
+} from "@/lib/types/project";
 
 export function useTracking(token: string) {
   const [project, setProject] = useState<Project | null>(null);
   const [logs, setLogs] = useState<ProjectLog[]>([]);
+  const [artifacts, setArtifacts] = useState<DiscussionArtifact[]>([]);
+  const [updates, setUpdates] = useState<ProgressUpdate[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -17,6 +24,8 @@ export function useTracking(token: string) {
         const data = await response.json();
         setProject(data.project);
         setLogs(data.logs);
+        setArtifacts(Array.isArray(data.artifacts) ? data.artifacts : []);
+        setUpdates(Array.isArray(data.updates) ? data.updates : []);
       } else {
         setError("Data tidak ditemukan. Token mungkin salah atau tidak valid.");
       }
@@ -38,6 +47,8 @@ export function useTracking(token: string) {
   return {
     project,
     logs,
+    artifacts,
+    updates,
     isLoading,
     error,
     latestProgress,

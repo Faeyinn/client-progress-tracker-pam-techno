@@ -47,63 +47,66 @@
 }
 
 :root {
-  --radius: 0.75rem;
+  --radius: 0.5rem; /* Sharper radius */
 
   /* Monochromatic Black & White Palette - Light Mode */
-  --background: oklch(0.99 0 0);
-  --foreground: oklch(0.1 0 0);
+  --background: oklch(1 0 0);
+  --foreground: oklch(0 0 0);
 
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.1 0 0);
+  --card-foreground: oklch(0 0 0);
 
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.1 0 0);
+  --popover-foreground: oklch(0 0 0);
 
   /* Primary - Pure Black */
-  --primary: oklch(0.15 0 0);
-  --primary-foreground: oklch(0.99 0 0);
+  --primary: oklch(0 0 0);
+  --primary-foreground: oklch(1 0 0);
 
   /* Secondary - Light Gray */
   --secondary: oklch(0.96 0 0);
-  --secondary-foreground: oklch(0.15 0 0);
+  --secondary-foreground: oklch(0 0 0);
 
   /* Muted - Soft Gray */
-  --muted: oklch(0.96 0 0);
+  --muted: oklch(0.97 0 0);
   --muted-foreground: oklch(0.45 0 0);
 
-  /* Accent - Very Light Gray */
-  --accent: oklch(0.94 0 0);
-  --accent-foreground: oklch(0.15 0 0);
+  /* Accent - very subtle hover state */
+  --accent: oklch(0.96 0 0);
+  --accent-foreground: oklch(0 0 0);
 
-  /* Destructive - Dark Gray with slight red hint */
-  --destructive: oklch(0.45 0.15 25);
+  /* Destructive */
+  --destructive: oklch(
+    0.4 0 0
+  ); /* Dark red equivalent in monochrome, keeping slight red for semantic error if needed but ideally handled by icon */
+  --destructive-foreground: oklch(1 0 0);
 
   /* Borders & Inputs */
-  --border: oklch(0.88 0 0);
+  --border: oklch(0.92 0 0);
   --input: oklch(0.92 0 0);
-  --ring: oklch(0.3 0 0);
+  --ring: oklch(0 0 0);
 
   /* Chart Colors - Grayscale */
-  --chart-1: oklch(0.2 0 0);
-  --chart-2: oklch(0.35 0 0);
+  --chart-1: oklch(0.1 0 0);
+  --chart-2: oklch(0.3 0 0);
   --chart-3: oklch(0.5 0 0);
-  --chart-4: oklch(0.65 0 0);
-  --chart-5: oklch(0.8 0 0);
+  --chart-4: oklch(0.7 0 0);
+  --chart-5: oklch(0.9 0 0);
 
   /* Sidebar */
-  --sidebar: oklch(0.99 0 0);
-  --sidebar-foreground: oklch(0.1 0 0);
-  --sidebar-primary: oklch(0.15 0 0);
-  --sidebar-primary-foreground: oklch(0.99 0 0);
-  --sidebar-accent: oklch(0.96 0 0);
-  --sidebar-accent-foreground: oklch(0.15 0 0);
-  --sidebar-border: oklch(0.9 0 0);
-  --sidebar-ring: oklch(0.3 0 0);
+  --sidebar: oklch(1 0 0);
+  --sidebar-foreground: oklch(0 0 0);
+  --sidebar-primary: oklch(0 0 0);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0 0 0);
+  --sidebar-border: oklch(0.92 0 0);
+  --sidebar-ring: oklch(0 0 0);
 
-  /* Status Colors - Minimal accent */
-  --status-progress: oklch(0.55 0 0);
-  --status-done: oklch(0.3 0 0);
-  --status-urgent: oklch(0.4 0 0);
+  /* Status Colors */
+  --status-progress: oklch(0.6 0 0);
+  --status-done: oklch(0 0 0);
+  --status-urgent: oklch(0.2 0 0);
 }
 
 .dark {
@@ -135,8 +138,8 @@
   --accent: oklch(0.94 0 0);
   --accent-foreground: oklch(0.15 0 0);
 
-  /* Destructive - Dark Gray with slight red hint */
-  --destructive: oklch(0.45 0.15 25);
+  /* Destructive - Monochrome */
+  --destructive: oklch(0.35 0 0);
 
   /* Borders & Inputs */
   --border: oklch(0.88 0 0);
@@ -173,10 +176,12 @@
 
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: calc(6rem + env(safe-area-inset-top));
   }
 
   body {
     @apply bg-background text-foreground antialiased;
+    min-height: 100svh;
     font-feature-settings:
       "rlig" 1,
       "calt" 1;
@@ -196,6 +201,32 @@
 
   .glass-card {
     @apply bg-card/80 backdrop-blur-xl border border-border/50 shadow-lg;
+  }
+
+  /* Dot Grid Pattern - Denser and sharper */
+  .bg-dot-grid {
+    background-image:
+      radial-gradient(circle, oklch(0 0 0 / 0.15) 1.5px, transparent 1.5px),
+      radial-gradient(circle, oklch(0 0 0 / 0.05) 1px, transparent 1px);
+    background-size:
+      32px 32px,
+      8px 8px;
+    mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+  }
+
+  .dark .bg-dot-grid {
+    background-image:
+      radial-gradient(circle, oklch(1 1 1 / 0.15) 1.5px, transparent 1.5px),
+      radial-gradient(circle, oklch(1 1 1 / 0.05) 1px, transparent 1px);
+  }
+
+  /* Secondary Grid for visual density */
+  .bg-grid-lines {
+    background-size: 40px 40px;
+    background-image:
+      linear-gradient(to right, oklch(0 0 0 / 0.03) 1px, transparent 1px),
+      linear-gradient(to bottom, oklch(0 0 0 / 0.03) 1px, transparent 1px);
+    mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
   }
 
   /* Subtle glow for dark mode */
@@ -412,5 +443,26 @@
 @media print {
   .no-print {
     display: none !important;
+  }
+}
+
+/* Meteor Animation */
+@layer utilities {
+  .animate-meteor-effect {
+    animation: meteor 5s linear infinite;
+  }
+}
+
+@keyframes meteor {
+  0% {
+    transform: rotate(215deg) translateX(0);
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(215deg) translateX(-500px);
+    opacity: 0;
   }
 }

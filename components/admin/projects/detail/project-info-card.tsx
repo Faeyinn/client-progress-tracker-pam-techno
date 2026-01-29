@@ -20,11 +20,14 @@ import {
 import { Project } from "@/lib/types/project";
 import { cn } from "@/lib/utils";
 
+import { Skeleton } from "@/components/ui/skeleton";
+
 interface ProjectInfoCardProps {
-  project: Project;
-  latestProgress: number;
+  project?: Project | null;
+  latestProgress?: number;
   copied: boolean;
   onCopyLink: () => void;
+  isLoading?: boolean;
 }
 
 // Circular progress component
@@ -88,34 +91,93 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 
 export function ProjectInfoCard({
   project,
-  latestProgress,
+  latestProgress = 0,
   copied,
   onCopyLink,
+  isLoading = false,
 }: ProjectInfoCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const magicLink = `${
-    typeof window !== "undefined" ? window.location.origin : ""
-  }/track/${project.uniqueToken}`;
+  const magicLink = project
+    ? `${typeof window !== "undefined" ? window.location.origin : ""}/track/${
+        project.uniqueToken
+      }`
+    : "";
+
+  if (isLoading || !project) {
+    return (
+      <Card className="border-border/50 shadow-sm bg-card h-fit">
+        <CardHeader className="pb-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Skeleton className="w-8 h-8 rounded-lg" />
+              <Skeleton className="h-6 w-32" />
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          {/* Skeleton Circular Progress */}
+          <div className="flex justify-center py-2">
+            <Skeleton className="w-[120px] h-[120px] rounded-full" />
+          </div>
+
+          <Separator className="bg-border/50" />
+
+          {/* Skeleton Client Info */}
+          <div className="space-y-4 p-4 bg-muted/30 rounded-xl border border-border/50">
+            <div>
+              <Skeleton className="h-3 w-16 mb-2" />
+              <div className="flex items-center gap-3">
+                <Skeleton className="w-9 h-9 rounded-full" />
+                <Skeleton className="h-5 w-32" />
+              </div>
+            </div>
+            <div>
+              <Skeleton className="h-3 w-16 mb-2" />
+              <div className="flex items-center gap-3">
+                <Skeleton className="w-9 h-9 rounded-full" />
+                <Skeleton className="h-5 w-40" />
+              </div>
+            </div>
+          </div>
+
+          <Separator className="bg-border/50" />
+
+          {/* Skeleton Details */}
+          <div className="space-y-4">
+            <div>
+              <Skeleton className="h-3 w-20 mb-2" />
+              <Skeleton className="h-8 w-full rounded-lg" />
+            </div>
+            <div>
+              <Skeleton className="h-3 w-16 mb-2" />
+              <Skeleton className="h-7 w-24 rounded-full" />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
-    <Card className="border-border/50 shadow-sm bg-card transition-all duration-300 hover:shadow-md">
-      <CardHeader className="pb-4">
+    <Card className="glass-card border-none shadow-2xl overflow-hidden hover-lift group">
+      <div className="h-1.5 bg-foreground w-full opacity-90" />
+      <CardHeader className="pb-6 pt-8">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-lg font-semibold flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-foreground/5 flex items-center justify-center">
-              <Briefcase className="w-4 h-4 text-foreground" />
+          <CardTitle className="text-xl font-black tracking-tighter flex items-center gap-3 uppercase">
+            <div className="w-10 h-10 rounded-xl bg-foreground text-background flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+              <Briefcase className="w-5 h-5" />
             </div>
-            Informasi Proyek
+            Management
           </CardTitle>
 
           {/* Mobile Toggle Button */}
           <Button
             variant="ghost"
             size="sm"
-            className="lg:hidden text-xs h-8"
+            className="lg:hidden text-[10px] font-black uppercase tracking-widest h-8 bg-muted/50 rounded-full px-4 border border-border/50"
             onClick={() => setIsExpanded(!isExpanded)}
           >
-            {isExpanded ? "Tutup" : "Detail"}
+            {isExpanded ? "Less" : "Info"}
             {isExpanded ? (
               <ChevronUp className="w-3.5 h-3.5 ml-1" />
             ) : (
@@ -125,91 +187,94 @@ export function ProjectInfoCard({
         </div>
       </CardHeader>
 
-      <CardContent className="space-y-6">
+      <CardContent className="space-y-8 pb-8">
         {/* Critical Info - Always Visible */}
-        <div className="flex justify-center py-2">
+        <div className="flex flex-col items-center justify-center py-4 bg-muted/5 rounded-3xl border border-border/5 shadow-inner">
           <CircularProgress progress={latestProgress} />
         </div>
 
         {/* Collapsible Section on Mobile / Always Visible on Desktop */}
         <div
           className={cn(
-            "space-y-6 lg:block transition-all duration-300 ease-in-out overflow-hidden",
+            "space-y-8 lg:block transition-all duration-500 ease-in-out overflow-hidden",
             isExpanded
-              ? "max-h-[800px] opacity-100"
+              ? "max-h-[1000px] opacity-100"
               : "max-h-0 opacity-0 lg:max-h-none lg:opacity-100",
           )}
         >
-          <Separator className="bg-border/50" />
+          <Separator className="bg-border/10" />
 
           {/* Client Info Section */}
-          <div className="space-y-4 p-4 bg-muted/30 rounded-xl border border-border/50">
+          <div className="space-y-5 p-6 bg-muted/20 backdrop-blur-sm rounded-3xl border border-border/10">
             <div>
-              <Label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
-                Klien
+              <Label className="text-[10px] font-black text-muted-foreground/60 uppercase tracking-[0.2em]">
+                Client Information
               </Label>
-              <div className="flex items-center gap-3 mt-2">
-                <div className="w-9 h-9 rounded-full bg-foreground/5 flex items-center justify-center border border-border/50">
-                  <User className="w-4 h-4 text-foreground/70" />
+              <div className="flex items-center gap-4 mt-3">
+                <div className="w-11 h-11 rounded-full bg-background flex items-center justify-center border border-border/50 shadow-sm">
+                  <User className="w-5 h-5 text-foreground" />
                 </div>
-                <p className="font-medium text-foreground">
+                <p className="font-black text-lg tracking-tight text-foreground uppercase">
                   {project.clientName}
                 </p>
               </div>
             </div>
 
             <div>
-              <Label className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
-                WhatsApp
+              <Label className="text-[10px] font-black text-muted-foreground/60 uppercase tracking-[0.2em]">
+                Direct Contact
               </Label>
-              <div className="flex items-center gap-3 mt-2">
-                <div className="w-9 h-9 rounded-full bg-foreground/5 flex items-center justify-center border border-border/50">
-                  <Phone className="w-4 h-4 text-foreground/70" />
+              <div className="flex items-center gap-4 mt-3">
+                <div className="w-11 h-11 rounded-full bg-background flex items-center justify-center border border-border/50 shadow-sm transition-transform hover:scale-110">
+                  <Phone className="w-5 h-5 text-foreground" />
                 </div>
                 <a
                   href={`https://wa.me/${project.clientPhone.replace(/^0/, "62")}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="font-medium text-foreground hover:underline transition-colors flex items-center gap-1"
+                  className="font-bold text-foreground hover:underline transition-colors flex items-center gap-1.5"
                 >
                   {project.clientPhone}
-                  <ExternalLink className="w-3 h-3 opacity-50" />
+                  <ExternalLink className="w-3.5 h-3.5 opacity-50" />
                 </a>
               </div>
             </div>
           </div>
 
-          <Separator className="bg-border/50" />
+          <Separator className="bg-border/10" />
 
           {/* Project Details */}
-          <div className="space-y-4">
+          <div className="space-y-5 px-1">
             <div>
-              <Label className="text-xs text-muted-foreground">Deadline</Label>
-              <div className="flex items-center gap-2 mt-1.5">
-                <div className="w-7 h-7 rounded-lg bg-muted flex items-center justify-center">
-                  <Calendar className="w-3.5 h-3.5 text-muted-foreground" />
+              <Label className="text-[10px] font-black text-muted-foreground/60 uppercase tracking-[0.2em]">
+                Deadline Schedule
+              </Label>
+              <div className="flex items-center gap-3 mt-3">
+                <div className="w-9 h-9 rounded-xl bg-muted flex items-center justify-center shadow-inner">
+                  <Calendar className="w-4 h-4 text-foreground/70" />
                 </div>
-                <p className="font-medium text-sm">
+                <p className="font-bold text-sm text-foreground">
                   {new Date(project.deadline).toLocaleDateString("id-ID", {
-                    weekday: "long",
-                    year: "numeric",
-                    month: "long",
                     day: "numeric",
+                    month: "long",
+                    year: "numeric",
                   })}
                 </p>
               </div>
             </div>
 
             <div>
-              <Label className="text-xs text-muted-foreground">Status</Label>
-              <div className="mt-1.5">
+              <Label className="text-[10px] font-black text-muted-foreground/60 uppercase tracking-[0.2em]">
+                Project Status
+              </Label>
+              <div className="mt-3">
                 <Badge
                   variant={project.status === "Done" ? "default" : "outline"}
                   className={cn(
-                    "px-3 py-1.5 text-xs font-medium",
+                    "text-[10px] font-black uppercase tracking-widest py-1.5 px-4 transition-all",
                     project.status === "Done"
-                      ? "bg-foreground text-background"
-                      : "border-foreground/30 text-foreground",
+                      ? "bg-foreground text-background shadow-lg shadow-foreground/20"
+                      : "border-foreground/30 text-foreground bg-muted/30",
                   )}
                 >
                   <span
@@ -220,7 +285,9 @@ export function ProjectInfoCard({
                         : "bg-foreground/50 animate-pulse",
                     )}
                   />
-                  {project.status}
+                  {project.status === "Done"
+                    ? "Project Launched"
+                    : "In Progress"}
                 </Badge>
               </div>
             </div>

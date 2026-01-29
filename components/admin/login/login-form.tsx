@@ -22,12 +22,12 @@ export function LoginForm() {
   } = useLogin();
 
   return (
-    <div className="space-y-6">
-      <div className="space-y-2 text-center lg:text-left">
-        <h2 className="text-3xl font-bold tracking-tight">
+    <div className="space-y-10">
+      <div className="space-y-4 text-center lg:text-left">
+        <h2 className="text-3xl font-black tracking-tighter uppercase leading-tight">
           Selamat Datang Kembali
         </h2>
-        <p className="text-muted-foreground">
+        <p className="text-muted-foreground font-medium">
           Masukkan kredensial Anda untuk mengakses dashboard admin.
         </p>
       </div>
@@ -63,12 +63,6 @@ export function LoginForm() {
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <Label htmlFor="password">Password</Label>
-            <a
-              href="mailto:fajar.saputra2907@gmail.com?subject=Admin%20Login%20Help"
-              className="touch-target inline-flex items-center justify-center px-2 text-sm text-muted-foreground hover:text-primary transition-colors underline-offset-4 hover:underline"
-            >
-              Lupa password?
-            </a>
           </div>
 
           <div className="relative">
@@ -90,11 +84,19 @@ export function LoginForm() {
               size="icon"
               disabled={isLoading}
               onClick={() => setIsPasswordVisible((value) => !value)}
-              aria-label={isPasswordVisible ? "Sembunyikan password" : "Tampilkan password"}
+              aria-label={
+                isPasswordVisible
+                  ? "Sembunyikan password"
+                  : "Tampilkan password"
+              }
               aria-pressed={isPasswordVisible}
               className="touch-target absolute right-1 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
             >
-              {isPasswordVisible ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              {isPasswordVisible ? (
+                <EyeOff className="h-4 w-4" />
+              ) : (
+                <Eye className="h-4 w-4" />
+              )}
             </Button>
           </div>
         </div>

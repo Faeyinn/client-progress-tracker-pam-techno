@@ -60,60 +60,10 @@ interface StatCardProps {
   index: number;
 }
 
-function StatCard({
-  title,
-  value,
-  icon: Icon,
-  isLoading,
-  index,
-}: StatCardProps) {
-  return (
-    <Card
-      className={cn(
-        "relative overflow-hidden group transition-all duration-300",
-        "hover:shadow-lg hover:-translate-y-1",
-        "border-border/50 bg-card",
-      )}
-      style={{
-        animationDelay: `${index * 100}ms`,
-      }}
-    >
-      {/* Decorative corner accent */}
-      <div className="absolute top-0 right-0 w-20 h-20 bg-foreground/2 rounded-bl-[100px] group-hover:bg-foreground/4 transition-colors" />
-
-      <CardContent className="p-5 sm:p-6 relative z-10">
-        <div className="flex items-start justify-between gap-4">
-          <div className="space-y-2">
-            <p className="text-sm font-medium text-muted-foreground tracking-wide">
-              {title}
-            </p>
-            {isLoading ? (
-              <div className="h-9 w-16 rounded-lg skeleton" />
-            ) : (
-              <h3 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground tabular-nums">
-                <AnimatedCounter value={value} />
-              </h3>
-            )}
-          </div>
-
-          <div className="p-3 rounded-xl bg-foreground/5 group-hover:bg-foreground/10 transition-all duration-300 group-hover:scale-110">
-            <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-foreground/70" />
-          </div>
-        </div>
-
-        {/* Bottom accent line */}
-        <div className="mt-4 h-0.5 rounded-full bg-foreground/5 overflow-hidden">
-          <div
-            className="h-full rounded-full bg-foreground/20 transition-all duration-700 ease-out"
-            style={{
-              width: isLoading ? "0%" : "100%",
-            }}
-          />
-        </div>
-      </CardContent>
-    </Card>
-  );
-}
+import {
+  CursorCard,
+  CursorCardsContainer,
+} from "@/components/anim/cursor-cards";
 
 export function StatsCards({ stats, isLoading }: StatsCardsProps) {
   const cards = [
@@ -138,26 +88,67 @@ export function StatsCards({ stats, isLoading }: StatsCardsProps) {
   ];
 
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6 mb-4 sm:mb-6">
-      {cards.map((card, index) => (
-        <div
-          key={card.title}
-          className={cn(
-            // Hide "Selesai" on mobile
-            !card.showOnMobile && "hidden sm:block",
-          )}
-        >
-          <StatCard {...card} isLoading={isLoading} index={index} />
-        </div>
-      ))}
-    </div>
+    <CursorCardsContainer className="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-6 sm:mb-8">
+      {cards.map((card, index) => {
+        const Icon = card.icon;
+
+        return (
+          <CursorCard
+            key={card.title}
+            surfaceClassName="bg-white dark:bg-zinc-900"
+            className={cn(
+              "relative overflow-hidden group transition-all duration-700",
+              "bg-transparent border-none shadow-[0_4px_20px_rgb(0,0,0,0.03)] dark:shadow-none hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)]",
+              "rounded-[1rem] hover:-translate-y-0.5",
+              // Hide "Selesai" on mobile
+              !card.showOnMobile && "hidden sm:block",
+            )}
+            style={{
+              animationDelay: `${index * 150}ms`,
+            }}
+            primaryHue="#E4E4E7" // Zinc 200
+            secondaryHue="#52525B" // Zinc 600
+            borderColor="#F4F4F5" // Zinc 100
+            illuminationColor="#FFFFFF20"
+          >
+            {/* Dynamic Background Accent - Inside CursorCard children */}
+            <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-foreground/5 to-transparent rounded-bl-full group-hover:scale-110 transition-transform duration-700 blur-2xl opacity-50" />
+            <div className="absolute bottom-0 left-0 w-16 h-16 bg-gradient-to-tr from-foreground/5 to-transparent rounded-tr-full group-hover:scale-110 transition-transform duration-700 blur-2xl opacity-30" />
+
+            <CardContent className="p-3 sm:p-4 relative z-10 flex flex-col justify-between h-full min-h-[90px]">
+              <div className="flex items-start justify-between gap-3">
+                <div className="p-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-foreground/80 shadow-sm group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
+                  <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
+                </div>
+
+                {/* Status Indicator */}
+                <div className="h-1 w-1 rounded-full bg-green-500 shadow-[0_0_8px_rgb(34,197,94,0.5)] animate-pulse" />
+              </div>
+
+              <div className="space-y-0.5 mt-2">
+                {isLoading ? (
+                  <div className="h-6 w-12 rounded-md bg-muted/20 animate-pulse" />
+                ) : (
+                  <h3 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tighter text-foreground tabular-nums leading-none">
+                    <AnimatedCounter value={card.value} />
+                  </h3>
+                )}
+                <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest pl-0.5">
+                  {card.title}
+                </p>
+              </div>
+            </CardContent>
+          </CursorCard>
+        );
+      })}
+    </CursorCardsContainer>
   );
 }
 
 // Skeleton loader component for stats
 export function StatsCardsSkeleton() {
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6 mb-4 sm:mb-6">
+    <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-6 sm:mb-8">
       {[0, 1, 2].map((index) => (
         <div
           key={index}
@@ -166,18 +157,7 @@ export function StatsCardsSkeleton() {
             index === 2 && "hidden sm:block",
           )}
         >
-          <Card className="border-border/50 bg-card">
-            <CardContent className="p-5 sm:p-6">
-              <div className="flex items-start justify-between gap-4">
-                <div className="space-y-3">
-                  <div className="h-4 w-24 rounded skeleton" />
-                  <div className="h-9 w-16 rounded-lg skeleton" />
-                </div>
-                <div className="h-12 w-12 rounded-xl skeleton" />
-              </div>
-              <div className="mt-4 h-0.5 rounded-full skeleton" />
-            </CardContent>
-          </Card>
+          <div className="h-40 rounded-[2rem] bg-muted/20 animate-pulse border border-border/10" />
         </div>
       ))}
     </div>

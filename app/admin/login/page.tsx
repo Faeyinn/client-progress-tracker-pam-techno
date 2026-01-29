@@ -1,95 +1,89 @@
 import Link from "next/link";
 import Image from "next/image";
 import { LoginForm } from "@/components/admin/login/login-form";
+import { Meteors } from "@/components/anim/meteors";
 
 export default function AdminLoginPage() {
   return (
     <div className="w-full min-h-dvh lg:min-h-screen lg:grid lg:grid-cols-2">
       {/* Left Side - Branding & Visuals */}
-      <div className="hidden lg:flex flex-col justify-between bg-primary text-primary-foreground p-10 relative overflow-hidden">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 z-0 opacity-10">
-          <svg
-            className="h-full w-full"
-            viewBox="0 0 100 100"
-            preserveAspectRatio="none"
-          >
-            <pattern
-              id="grid"
-              width="8"
-              height="8"
-              patternUnits="userSpaceOnUse"
-            >
-              <path
-                d="M 8 0 L 0 0 0 8"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="0.5"
-              />
-            </pattern>
-            <rect width="100" height="100" fill="url(#grid)" />
-          </svg>
+      <div className="hidden lg:flex flex-col justify-between bg-zinc-950 text-white p-16 relative overflow-hidden font-sans">
+        {/* Background Meteors */}
+        <div className="absolute inset-0 z-0 opacity-50">
+          <Meteors number={30} />
+          {/* Enhanced Gradient Overlay for readability while keeping meteors visible */}
+          <div className="absolute inset-0 bg-gradient-to-tr from-zinc-950/90 via-zinc-950/40 to-transparent" />
+          <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-zinc-950 to-transparent" />
         </div>
 
         {/* Logo */}
-        <div className="relative z-10 flex items-center gap-0">
-          <div className="relative w-12 h-12">
+        <div className="relative z-10 flex items-center gap-0 animate-in fade-in slide-in-from-top-6 duration-1000">
+          <div className="relative w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl p-2 shadow-[0_8px_32px_rgba(0,0,0,0.12)] border border-white/10">
             <Image
               src="/logo-pure.png"
               alt="Logo"
               fill
-              sizes="48px"
-              className="object-contain"
+              sizes="64px"
+              className="object-contain p-2 drop-shadow-lg"
             />
           </div>
-          <span className="ml-4 text-xl font-bold tracking-tight">
-            PAM Techno Admin
+          <span className="ml-5 text-3xl font-black tracking-tight uppercase bg-clip-text text-transparent bg-gradient-to-br from-white to-white/70">
+            PAM Techno
           </span>
         </div>
 
         {/* Hero Text */}
-        <div className="relative z-10 space-y-4 max-w-lg">
-          <h1 className="text-4xl font-extrabold tracking-tight leading-tight">
-            Manajemen Proyek yang{" "}
-            <span className="text-primary-foreground">Efisien & Terukur</span>
+        <div className="relative z-10 space-y-8 max-w-lg mb-12 animate-in fade-in slide-in-from-left-6 duration-1000 delay-200">
+          <h1 className="text-6xl lg:text-7xl font-black tracking-tighter leading-[0.85] uppercase">
+            Admin <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white/40 to-white/10">
+              Console
+            </span>
           </h1>
-          <p className="text-lg text-primary-foreground/80">
-            Dashboard komprehensif untuk memantau progress, mengelola timeline,
-            dan memastikan kepuasan klien.
+          <p className="text-xl text-zinc-400 font-medium tracking-wide leading-relaxed border-l-2 border-white/20 pl-6">
+            Pusat kendali proyek digital Kamu. Pantau, kelola, dan sampaikan
+            hasil terbaik untuk klien.
           </p>
         </div>
 
         {/* Footer info */}
-        <div className="relative z-10 text-sm text-primary-foreground/50">
-          &copy; 2026 PAM Techno. Hanya Untuk Penggunaan Internal.
+        <div className="relative z-10 text-[11px] font-bold tracking-[0.25em] uppercase text-zinc-600 animate-in fade-in duration-1000 delay-500">
+          &copy; 2026 PAM Techno. Restricted Access.
         </div>
       </div>
 
       {/* Right Side - Login Form */}
-      <div className="flex min-h-dvh items-start justify-center bg-background px-4 py-8 sm:px-6 sm:py-12 lg:min-h-screen lg:items-center lg:px-12 relative overflow-y-auto lg:overflow-visible">
-        <div className="w-full max-w-100 space-y-6 pb-[calc(2rem+env(safe-area-inset-bottom))]">
+      <div className="flex min-h-dvh items-start justify-center bg-zinc-50 dark:bg-zinc-950 px-4 py-8 sm:px-6 sm:py-12 lg:min-h-screen lg:items-center lg:px-16 relative overflow-y-auto lg:overflow-visible transition-colors duration-500">
+        <div className="w-full max-w-md space-y-8 pb-[calc(2rem+env(safe-area-inset-bottom))]">
           {/* Mobile Logo (Visible only on lg and below) */}
-          <div className="lg:hidden flex flex-col items-center space-y-2 mb-6 sm:mb-8 animate-in fade-in slide-in-from-top-4">
-            <div className="relative w-16 h-16">
+          <div className="lg:hidden flex flex-col items-center space-y-4 mb-8 animate-in fade-in slide-in-from-top-4">
+            <div className="relative w-20 h-20 bg-background rounded-3xl p-3 shadow-2xl shadow-zinc-200 dark:shadow-none border border-border/50">
               <Image
                 src="/logo-pure.png"
                 alt="Logo"
                 fill
-                sizes="64px"
-                className="object-contain"
+                sizes="80px"
+                className="object-contain p-3"
               />
             </div>
-            <h1 className="text-xl font-bold">PAM Techno</h1>
+            <h1 className="text-2xl font-black tracking-tighter uppercase">
+              PAM Techno
+            </h1>
           </div>
 
-          <LoginForm />
+          <div className="bg-white/80 dark:bg-zinc-900/50 backdrop-blur-xl p-10 sm:p-12 lg:p-16 rounded-[2.5rem] shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)] border border-white/50 dark:border-white/5 hover:shadow-[0_30px_60px_-20px_rgba(0,0,0,0.15)] transition-all duration-300">
+            <LoginForm />
+          </div>
 
-          <div className="text-center">
+          <div className="text-center animate-in fade-in slide-in-from-bottom-2 duration-700 delay-300">
             <Link
               href="/"
-              className="text-sm text-muted-foreground hover:text-primary transition-colors underline-offset-4 hover:underline"
+              className="text-xs font-bold uppercase tracking-widest text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-50 transition-all flex items-center justify-center gap-2 group py-2"
             >
-              ← Kembali ke Beranda
+              <span className="transition-transform group-hover:-translate-x-1">
+                ←
+              </span>
+              Kembali ke Beranda
             </Link>
           </div>
         </div>

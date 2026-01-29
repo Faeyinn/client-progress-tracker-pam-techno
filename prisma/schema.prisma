@@ -7,6 +7,22 @@ datasource db {
   provider = "postgresql"
 }
 
+enum ProjectPhase {
+  DISCOVERY
+  DESIGN
+  DEVELOPMENT
+  QA
+  LAUNCH
+  MAINTENANCE
+}
+
+enum ArtifactType {
+  WIREFRAME
+  USER_FLOW
+  MEETING_NOTES
+  OTHER
+}
+
 model User {
   id        String   @id @default(cuid())
   username  String   @unique
@@ -29,20 +45,97 @@ model Project {
   updatedAt   DateTime         @updatedAt @map("updated_at")
   feedbacks   ClientFeedback[]
   logs        ProjectLog[]
+  artifacts   DiscussionArtifact[]
+  updates     ProgressUpdate[]
 
   @@index([uniqueToken])
   @@index([clientPhone])
   @@map("projects")
 }
 
-model ProjectLog {
-  id          String   @id @default(cuid())
-  projectId   String   @map("project_id")
+model DiscussionArtifact {
+  id          String       @id @default(cuid())
+  projectId   String       @map("project_id")
   title       String
+  description String?
+  phase       ProjectPhase
+  type        ArtifactType?
+
+  // Either provide fileData OR sourceLinkUrl
+  fileName     String? @map("file_name")
+  mimeType     String? @map("mime_type")
+  fileSize     Int?    @map("file_size")
+  fileData     Bytes?  @map("file_data")
+  sourceLinkUrl String? @map("source_link_url")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@index([projectId, phase])
+  @@map("discussion_artifacts")
+}
+
+model ProgressUpdate {
+  id          String       @id @default(cuid())
+  projectId   String       @map("project_id")
+  phase       ProjectPhase?
   description String
-  percentage  Int
-  createdAt   DateTime @default(now()) @map("created_at")
-  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  images  ProgressUpdateImage[]
+  links   ProgressUpdateLink[]
+  logs    ProjectLog[]
+
+  @@index([projectId])
+  @@index([projectId, createdAt])
+  @@map("progress_updates")
+}
+
+model ProgressUpdateImage {
+  id              String @id @default(cuid())
+  progressUpdateId String @map("progress_update_id")
+  fileName        String? @map("file_name")
+  mimeType        String? @map("mime_type")
+  fileSize        Int?    @map("file_size")
+  fileUrl         String  @map("file_url")
+  sortOrder       Int     @default(0) @map("sort_order")
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  progressUpdate ProgressUpdate @relation(fields: [progressUpdateId], references: [id], onDelete: Cascade)
+
+  @@index([progressUpdateId])
+  @@map("progress_update_images")
+}
+
+model ProgressUpdateLink {
+  id              String @id @default(cuid())
+  progressUpdateId String @map("progress_update_id")
+  label           String
+  url             String
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  progressUpdate ProgressUpdate @relation(fields: [progressUpdateId], references: [id], onDelete: Cascade)
+
+  @@index([progressUpdateId])
+  @@map("progress_update_links")
+}
+
+model ProjectLog {
+  id               String          @id @default(cuid())
+  projectId        String          @map("project_id")
+  title            String
+  description      String
+  percentage       Int
+  createdAt        DateTime        @default(now()) @map("created_at")
+  project          Project         @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  progressUpdate   ProgressUpdate? @relation(fields: [progressUpdateId], references: [id])
+  progressUpdateId String?         @map("progress_update_id")
 
   @@index([projectId])
   @@map("project_logs")

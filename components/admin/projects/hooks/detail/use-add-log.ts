@@ -10,6 +10,10 @@ export function useAddLog(projectId: string, onSuccess: () => void) {
     description: "",
     percentage: "",
     sendNotification: true,
+    visualDescription: "",
+    phase: "",
+    images: [] as File[],
+    links: [] as { label: string; url: string }[],
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -17,15 +21,26 @@ export function useAddLog(projectId: string, onSuccess: () => void) {
     setIsSubmitting(true);
 
     try {
+      const formData = new FormData();
+      formData.append("title", logForm.title);
+      formData.append("description", logForm.description);
+      formData.append("percentage", logForm.percentage);
+      formData.append("sendNotification", String(logForm.sendNotification));
+      formData.append("visualDescription", logForm.visualDescription);
+      formData.append("phase", logForm.phase);
+
+      const sanitizedLinks = logForm.links
+        .map((l) => ({ label: l.label.trim() || "Link", url: l.url.trim() }))
+        .filter((l) => /^https?:\/\//i.test(l.url));
+      formData.append("links", JSON.stringify(sanitizedLinks));
+
+      logForm.images.forEach((file) => {
+        formData.append("images", file);
+      });
+
       const response = await fetch(`/api/projects/${projectId}/logs`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title: logForm.title,
-          description: logForm.description,
-          percentage: parseInt(logForm.percentage),
-          sendNotification: logForm.sendNotification,
-        }),
+        body: formData,
       });
 
       if (response.ok) {
@@ -34,11 +49,16 @@ export function useAddLog(projectId: string, onSuccess: () => void) {
           description: "",
           percentage: "",
           sendNotification: true,
+          visualDescription: "",
+          phase: "",
+          images: [],
+          links: [],
         });
         onSuccess();
-        toast.success("Log progress berhasil ditambahkan!");
+        toast.success("Log progress & visual update berhasil ditambahkan!");
       } else {
-        toast.error("Gagal menambahkan log");
+        const data = await response.json();
+        toast.error(data.message || "Gagal menambahkan log");
       }
     } catch {
       toast.error("Terjadi kesalahan");

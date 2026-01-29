@@ -1,10 +1,12 @@
 "use client";
 
 import { useState, useCallback, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import { Project, DashboardStats } from "@/lib/types/project";
 import { toast } from "sonner";
 
 export function useDashboardLogic() {
+  const router = useRouter();
   const [projects, setProjects] = useState<Project[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
@@ -15,6 +17,13 @@ export function useDashboardLogic() {
     try {
       setIsLoading(true);
       const response = await fetch("/api/projects");
+
+      if (response.status === 401) {
+        toast.error("Sesi kadaluarsa, silakan login kembali");
+        router.push("/admin/login");
+        return;
+      }
+
       if (response.ok) {
         const data = await response.json();
         setProjects(data);

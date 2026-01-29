@@ -6,9 +6,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Loader2, ArrowLeft, PenLine } from "lucide-react";
+import { ArrowLeft, PenLine } from "lucide-react";
 import { EditProjectForm } from "@/components/admin/projects/edit/edit-project-form";
 import { Project } from "@/lib/types/project";
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export default function EditProjectPage() {
   const params = useParams();
@@ -40,8 +48,42 @@ export default function EditProjectPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <Loader2 className="w-10 h-10 animate-spin text-primary" />
+      <div className="min-h-screen bg-muted/10">
+        <header className="bg-background/80 backdrop-blur-md border-b border-border/50 sticky top-0 z-10">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div className="flex items-center gap-6">
+              <Skeleton className="w-10 h-10 rounded-full" />
+              <div className="flex items-center gap-4">
+                <Skeleton className="w-12 h-12 rounded-xl" />
+                <div className="space-y-2">
+                  <Skeleton className="h-6 w-32" />
+                  <Skeleton className="h-4 w-48" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+        <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <Card className="border border-border/60 shadow-sm bg-card">
+            <CardHeader className="pb-4">
+              <Skeleton className="h-8 w-48 mb-2" />
+              <Skeleton className="h-4 w-64" />
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <Skeleton className="h-20 w-full rounded-lg" />
+              {[1, 2, 3, 4, 5].map((i) => (
+                <div key={i} className="space-y-2">
+                  <Skeleton className="h-4 w-24" />
+                  <Skeleton className="h-10 w-full rounded-md" />
+                </div>
+              ))}
+              <div className="flex flex-col gap-3 pt-4">
+                <Skeleton className="h-11 w-full rounded-md" />
+                <Skeleton className="h-11 w-full rounded-md" />
+              </div>
+            </CardContent>
+          </Card>
+        </main>
       </div>
     );
   }

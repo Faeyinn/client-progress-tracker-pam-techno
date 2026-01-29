@@ -24,14 +24,23 @@ import {
   User,
   Phone,
   Briefcase,
-  Calendar,
+  Calendar as CalendarIcon,
   AlertTriangle,
   Loader2,
   Save,
 } from "lucide-react";
+import { format } from "date-fns";
+import { id } from "date-fns/locale";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { toast } from "sonner";
 import { Project } from "@/lib/types/project";
 import { PhoneChangeWarningDialog } from "./phone-change-warning-dialog";
+import { cn } from "@/lib/utils";
 
 interface EditProjectFormProps {
   project: Project;
@@ -49,7 +58,7 @@ export function EditProjectForm({ project }: EditProjectFormProps) {
     clientName: project.clientName,
     clientPhone: project.clientPhone,
     projectName: project.projectName,
-    deadline: new Date(project.deadline).toISOString().split("T")[0],
+    deadline: format(new Date(project.deadline), "yyyy-MM-dd"),
     status: project.status as "On Progress" | "Done",
   });
 
@@ -74,6 +83,12 @@ export function EditProjectForm({ project }: EditProjectFormProps) {
 
   const handleStatusChange = (value: string) => {
     setFormData({ ...formData, status: value as "On Progress" | "Done" });
+  };
+
+  const handleDateChange = (date: Date | undefined) => {
+    if (date) {
+      setFormData({ ...formData, deadline: format(date, "yyyy-MM-dd") });
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -243,19 +258,38 @@ export function EditProjectForm({ project }: EditProjectFormProps) {
               <Label htmlFor="deadline" className="text-sm font-medium">
                 Deadline <span className="text-destructive">*</span>
               </Label>
-              <div className="relative">
-                <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input
-                  id="deadline"
-                  name="deadline"
-                  type="date"
-                  value={formData.deadline}
-                  onChange={handleChange}
-                  className="pl-9 bg-background focus:bg-background"
-                  required
-                  disabled={isSubmitting}
-                />
-              </div>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant={"outline"}
+                    className={cn(
+                      "w-full pl-3 text-left font-normal h-11 bg-background flex items-center gap-2",
+                      !formData.deadline && "text-muted-foreground",
+                    )}
+                    disabled={isSubmitting}
+                  >
+                    <CalendarIcon className="w-4 h-4 text-muted-foreground" />
+                    {formData.deadline ? (
+                      format(new Date(formData.deadline), "PPP", { locale: id })
+                    ) : (
+                      <span>Pilih Tanggal</span>
+                    )}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={new Date(formData.deadline)}
+                    onSelect={handleDateChange}
+                    initialFocus
+                    disabled={(date) =>
+                      date < new Date(new Date().setHours(0, 0, 0, 0)) &&
+                      date.getTime() !==
+                        new Date(project.deadline).setHours(0, 0, 0, 0)
+                    }
+                  />
+                </PopoverContent>
+              </Popover>
             </div>
 
             <div className="space-y-2">

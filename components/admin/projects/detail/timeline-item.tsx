@@ -1,9 +1,11 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
-import { Calendar, Sparkles } from "lucide-react";
+import { Calendar, Sparkles, ImageIcon, Link2 } from "lucide-react";
+import Image from "next/image";
 import { ProjectLog } from "@/lib/types/project";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 interface TimelineItemProps {
   log: ProjectLog;
@@ -55,13 +57,13 @@ export function TimelineItem({ log, isLatest, index }: TimelineItemProps) {
         >
           {/* Header */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-3 gap-2">
-            <h3 className="text-sm sm:text-base font-semibold text-foreground line-clamp-2">
+            <h3 className="text-sm sm:text-base font-black tracking-tight text-foreground line-clamp-2 uppercase">
               {log.title}
             </h3>
             <Badge
               variant={isLatest ? "default" : "secondary"}
               className={cn(
-                "w-fit text-[10px] sm:text-xs shrink-0",
+                "w-fit text-[10px] sm:text-xs shrink-0 font-bold tracking-widest uppercase",
                 isLatest
                   ? "bg-foreground text-background"
                   : "bg-muted text-muted-foreground",
@@ -79,6 +81,68 @@ export function TimelineItem({ log, isLatest, index }: TimelineItemProps) {
           <p className="text-xs sm:text-sm text-muted-foreground mb-4 leading-relaxed whitespace-pre-wrap">
             {log.description}
           </p>
+
+          {/* Visual Update (Images & Links) */}
+          {log.progressUpdate && (
+            <div className="space-y-4 mb-5 p-3 sm:p-4 rounded-xl bg-muted/30 border border-border/50">
+              {/* Images Grid */}
+              {log.progressUpdate.images.length > 0 && (
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
+                  {log.progressUpdate.images.map((img) => (
+                    <a
+                      key={img.id}
+                      href={img.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="group/img block"
+                    >
+                      <div className="relative aspect-video rounded-lg overflow-hidden border bg-muted shadow-sm">
+                        <Image
+                          src={img.url}
+                          alt={img.fileName || "Progress screenshot"}
+                          fill
+                          sizes="(max-width: 768px) 50vw, 33vw"
+                          className="object-cover group-hover/img:scale-110 transition-transform duration-500"
+                        />
+                        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
+                          <ImageIcon className="w-5 h-5 text-white shadow-sm" />
+                        </div>
+                      </div>
+                    </a>
+                  ))}
+                </div>
+              )}
+
+              {/* Links Buttons */}
+              {log.progressUpdate.links.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {log.progressUpdate.links.map((l) => (
+                    <Button
+                      key={l.id}
+                      asChild
+                      variant="outline"
+                      size="sm"
+                      className="h-8 text-[10px] sm:text-xs font-bold gap-2 rounded-full border-border/50 hover:bg-foreground hover:text-background transition-all"
+                    >
+                      <a href={l.url} target="_blank" rel="noreferrer">
+                        <Link2 className="w-3 h-3" />
+                        {l.label}
+                      </a>
+                    </Button>
+                  ))}
+                </div>
+              )}
+
+              {log.progressUpdate.phase && (
+                <div className="flex items-center gap-1.5 opacity-60">
+                  <div className="w-1 h-1 rounded-full bg-foreground" />
+                  <span className="text-[10px] font-black uppercase tracking-[0.2em]">
+                    {log.progressUpdate.phase}
+                  </span>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Footer */}
           <div className="flex items-center text-[10px] sm:text-xs text-muted-foreground/60 pt-3 border-t border-border/50">
