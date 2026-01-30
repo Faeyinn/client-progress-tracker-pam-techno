@@ -39,11 +39,11 @@ export function TeamCapacityWidget({ projects }: TeamCapacityWidgetProps) {
   }, [projects]);
 
   const getWorkloadColor = (level: string) => {
-    return "bg-white dark:bg-zinc-900";
+    return "bg-card";
   };
 
   const getWorkloadIcon = (level: string) => {
-    return "text-zinc-600 dark:text-zinc-400";
+    return "text-muted-foreground";
   };
 
   const getWorkloadLabel = (level: string) => {
@@ -60,17 +60,17 @@ export function TeamCapacityWidget({ projects }: TeamCapacityWidgetProps) {
   return (
     <CursorCardsContainer>
       <CursorCard
-        surfaceClassName="bg-white dark:bg-zinc-900"
-        className="rounded-[1.5rem] shadow-lg shadow-zinc-200/50 dark:shadow-none h-full"
-        primaryHue="#E4E4E7"
-        secondaryHue="#52525B"
-        borderColor="#F4F4F5"
-        illuminationColor="#FFFFFF20"
+        surfaceClassName="bg-card dark:bg-card"
+        className="rounded-[1.5rem] shadow-lg shadow-accent/10 dark:shadow-none h-full"
+        primaryHue="oklch(0.58 0.16 158)" // Medium emerald
+        secondaryHue="oklch(0.52 0.17 160)" // Rich emerald
+        borderColor="oklch(0.88 0.015 155)" // Sage border
+        illuminationColor="oklch(0.52 0.17 160 / 0.2)" // Emerald glow
       >
         <CardHeader className="pb-4">
           <div className="flex items-start justify-between gap-4">
             <div className="flex items-start gap-3 flex-1">
-              <div className="p-2 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">
+              <div className="p-2 rounded-lg bg-muted text-muted-foreground">
                 <Users className="w-5 h-5" />
               </div>
               <div className="flex-1">
@@ -96,15 +96,15 @@ export function TeamCapacityWidget({ projects }: TeamCapacityWidgetProps) {
                 {capacityMetrics.utilizationRate}%
               </span>
             </div>
-            <div className="w-full h-2 bg-zinc-200 dark:bg-zinc-800 rounded-full overflow-hidden">
+            <div className="w-full h-2 bg-muted rounded-full overflow-hidden">
             <div
                 className="h-full transition-all duration-700 ease-out rounded-full"
                 style={{
                   background: capacityMetrics.workloadLevel === "critical"
-                    ? "#000"
+                    ? "oklch(0.50 0.20 25)" // Destructive red
                     : capacityMetrics.workloadLevel === "high"
-                      ? "#52525B"
-                      : "#A1A1AA",
+                      ? "oklch(0.72 0.15 85)" // Gold warning
+                      : "oklch(0.52 0.17 160)", // Rich emerald
                   width: `${capacityMetrics.utilizationRate}%`,
                 }}
               />
@@ -113,7 +113,7 @@ export function TeamCapacityWidget({ projects }: TeamCapacityWidgetProps) {
 
           {/* Project Status Grid */}
           <div className="grid grid-cols-2 gap-4">
-            <div className="p-3 rounded-lg bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-700">
+            <div className="p-3 rounded-lg bg-muted/50 border border-border">
               <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1">
                 Proyek Aktif
               </p>
@@ -125,7 +125,7 @@ export function TeamCapacityWidget({ projects }: TeamCapacityWidgetProps) {
               </p>
             </div>
 
-            <div className="p-3 rounded-lg bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-700">
+            <div className="p-3 rounded-lg bg-muted/50 border border-border">
               <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1">
                 Progress Rata-rata
               </p>
@@ -139,9 +139,9 @@ export function TeamCapacityWidget({ projects }: TeamCapacityWidgetProps) {
           </div>
 
           {/* Workload Recommendation */}
-          <div className="p-3 rounded-lg bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-700">
+          <div className="p-3 rounded-lg bg-muted/50 border border-border">
             <div className="flex gap-2 items-start">
-              <AlertCircle className="w-4 h-4 mt-0.5 shrink-0 text-zinc-600 dark:text-zinc-400" />
+              <AlertCircle className="w-4 h-4 mt-0.5 shrink-0 text-muted-foreground" />
               <div className="flex-1">
                 <p className="text-xs font-semibold text-foreground mb-1">
                   {capacityMetrics.workloadLevel === "critical"

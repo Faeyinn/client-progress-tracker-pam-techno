@@ -72,12 +72,12 @@ export function ProjectChart({ projects }: ProjectChartProps) {
   return (
     <CursorCardsContainer>
       <CursorCard
-        surfaceClassName="bg-white dark:bg-zinc-900"
-        className="rounded-[1.5rem] shadow-lg shadow-zinc-200/50 dark:shadow-none mb-8"
-        primaryHue="#E4E4E7" // Zinc 200
-        secondaryHue="#52525B" // Zinc 600
-        borderColor="#F4F4F5" // Zinc 100
-        illuminationColor="#FFFFFF20"
+        surfaceClassName="bg-card dark:bg-card"
+        className="rounded-[1.5rem] shadow-lg shadow-accent/10 dark:shadow-none mb-8"
+        primaryHue="oklch(0.58 0.16 158)" // Medium emerald
+        secondaryHue="oklch(0.52 0.17 160)" // Rich emerald
+        borderColor="oklch(0.88 0.015 155)" // Sage border
+        illuminationColor="oklch(0.52 0.17 160 / 0.2)" // Emerald glow
       >
         <CardHeader className="pt-4 pb-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
@@ -117,10 +117,13 @@ export function ProjectChart({ projects }: ProjectChartProps) {
                 }}
               >
                 <defs>
+                  {/* Emerald gradient for total projects */}
                   <linearGradient id="colorTotal" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#52525B" stopOpacity={0.8} />
-                    <stop offset="95%" stopColor="#52525B" stopOpacity={0} />
+                    <stop offset="5%" stopColor="oklch(0.52 0.17 160)" stopOpacity={0.7} />
+                    <stop offset="50%" stopColor="oklch(0.58 0.16 158)" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="oklch(0.65 0.14 155)" stopOpacity={0} />
                   </linearGradient>
+                  {/* Gold gradient for completed projects */}
                   <linearGradient
                     id="colorCompleted"
                     x1="0"
@@ -128,26 +131,27 @@ export function ProjectChart({ projects }: ProjectChartProps) {
                     x2="0"
                     y2="1"
                   >
-                    <stop offset="5%" stopColor="#A1A1AA" stopOpacity={0.8} />
-                    <stop offset="95%" stopColor="#A1A1AA" stopOpacity={0} />
+                    <stop offset="5%" stopColor="oklch(0.72 0.15 85)" stopOpacity={0.7} />
+                    <stop offset="50%" stopColor="oklch(0.75 0.14 85)" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="oklch(0.78 0.10 85)" stopOpacity={0} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid
                   strokeDasharray="3 3"
                   vertical={false}
-                  stroke="#27272a"
-                  opacity={0.1}
+                  stroke="oklch(0.45 0.02 155)"
+                  opacity={0.15}
                 />
                 <XAxis
                   dataKey="name"
-                  stroke="#71717a"
+                  stroke="oklch(0.45 0.02 155)"
                   fontSize={12}
                   tickLine={false}
                   axisLine={false}
                   tickMargin={10}
                 />
                 <YAxis
-                  stroke="#71717a"
+                  stroke="oklch(0.45 0.02 155)"
                   fontSize={12}
                   tickLine={false}
                   axisLine={false}
@@ -159,24 +163,24 @@ export function ProjectChart({ projects }: ProjectChartProps) {
                     if (active && payload && payload.length) {
                       const dataItem = payload[0].payload;
                       return (
-                        <div className="rounded-xl border border-border bg-background/80 backdrop-blur-sm p-3 shadow-xl">
-                          <p className="text-xs font-bold text-foreground mb-2 opacity-70">
+                        <div className="rounded-xl border border-border bg-card/95 backdrop-blur-md p-4 shadow-xl">
+                          <p className="text-xs font-bold text-foreground mb-3 opacity-70">
                             {dataItem.fullName}
                           </p>
                           <div className="grid grid-cols-2 gap-4">
                             <div className="flex flex-col">
-                              <span className="text-[10px] uppercase text-muted-foreground font-bold">
+                              <span className="text-[10px] uppercase text-muted-foreground font-bold tracking-wide">
                                 Total Dibuat
                               </span>
-                              <span className="text-lg font-bold text-foreground">
+                              <span className="text-xl font-black text-accent">
                                 {payload[0].value}
                               </span>
                             </div>
                             <div className="flex flex-col">
-                              <span className="text-[10px] uppercase text-green-600/70 dark:text-green-400/70 font-bold">
+                              <span className="text-[10px] uppercase text-chart-5/80 font-bold tracking-wide">
                                 Selesai
                               </span>
-                              <span className="text-lg font-bold text-green-600 dark:text-green-400">
+                              <span className="text-xl font-black text-chart-5">
                                 {payload[1].value}
                               </span>
                             </div>
@@ -190,8 +194,8 @@ export function ProjectChart({ projects }: ProjectChartProps) {
                 <Area
                   type="monotone"
                   dataKey="total"
-                  stroke="#52525B"
-                  strokeWidth={2}
+                  stroke="oklch(0.52 0.17 160)"
+                  strokeWidth={2.5}
                   fillOpacity={1}
                   fill="url(#colorTotal)"
                   animationDuration={1500}
@@ -199,8 +203,8 @@ export function ProjectChart({ projects }: ProjectChartProps) {
                 <Area
                   type="monotone"
                   dataKey="completed"
-                  stroke="#A1A1AA"
-                  strokeWidth={2}
+                  stroke="oklch(0.72 0.15 85)"
+                  strokeWidth={2.5}
                   fillOpacity={1}
                   fill="url(#colorCompleted)"
                   animationDuration={1500}

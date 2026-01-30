@@ -34,11 +34,11 @@ export function AccessPanel() {
           <Button
             asChild
             variant="outline"
-            className="w-full h-16 justify-between px-4 border-border/60 bg-white/50 dark:bg-neutral-900/50 rounded-xl hover:bg-neutral-50 dark:hover:bg-neutral-800 hover:shadow-md hover:border-foreground/20 active:scale-[0.98] group/btn transition-all duration-200"
+            className="w-full h-16 justify-between px-4 border-border/60 bg-card/50 rounded-xl hover:bg-muted hover:shadow-md hover:border-accent/30 active:scale-[0.98] group/btn transition-all duration-200"
           >
             <a href={waHref} target="_blank" rel="noreferrer">
               <span className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-full bg-blue-50 dark:bg-blue-950/30 flex items-center justify-center group-hover/btn:scale-110 transition-transform text-blue-600 dark:text-blue-400">
+                <div className="h-10 w-10 rounded-full bg-accent/10 flex items-center justify-center group-hover/btn:scale-110 transition-transform text-accent">
                   <Smartphone className="h-5 w-5" />
                 </div>
                 <div className="text-left">
@@ -66,7 +66,7 @@ export function AccessPanel() {
           />
         </div>
 
-        <div className="pt-6 border-t-2 border-neutral-300 dark:border-neutral-700">
+        <div className="pt-6 border-t-2 border-border">
           <Button
             variant="ghost"
             size="sm"
@@ -83,7 +83,7 @@ export function AccessPanel() {
                 {showToken ? "Sembunyikan Token" : "Gunakan Token Manual"}
               </span>
             </span>
-            <span className="bg-neutral-100 dark:bg-neutral-800 px-2 py-0.5 rounded text-[10px] opacity-70 group-hover/toggle:opacity-100 transition-opacity">
+            <span className="bg-muted px-2 py-0.5 rounded text-[10px] opacity-70 group-hover/toggle:opacity-100 transition-opacity">
               {showToken ? "ESC" : "OPSIONAL"}
             </span>
           </Button>

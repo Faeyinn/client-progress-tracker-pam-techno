@@ -80,14 +80,14 @@ export function KPICards({ projects, isLoading }: KPICardsProps) {
         {cards.map((card, index) => (
           <CursorCard
             key={card.title}
-            surfaceClassName="bg-white dark:bg-zinc-900"
+            surfaceClassName="bg-card dark:bg-card"
             className="relative overflow-hidden group transition-all duration-700"
           >
             <div className="p-6 space-y-4 animate-pulse">
-              <div className="w-12 h-12 rounded-lg bg-zinc-200 dark:bg-zinc-800" />
+              <div className="w-12 h-12 rounded-lg bg-muted" />
               <div className="space-y-2">
-                <div className="h-4 w-3/4 rounded bg-zinc-200 dark:bg-zinc-800" />
-                <div className="h-8 w-1/2 rounded bg-zinc-200 dark:bg-zinc-800" />
+                <div className="h-4 w-3/4 rounded bg-muted" />
+                <div className="h-8 w-1/2 rounded bg-muted" />
               </div>
             </div>
           </CursorCard>
@@ -104,16 +104,16 @@ export function KPICards({ projects, isLoading }: KPICardsProps) {
         return (
           <CursorCard
             key={card.title}
-            surfaceClassName="bg-white dark:bg-zinc-900"
+            surfaceClassName="bg-card dark:bg-card"
             className="relative overflow-hidden group transition-all duration-700 shadow-md hover:shadow-lg"
-            primaryHue="#E4E4E7"
-            secondaryHue="#52525B"
-            borderColor="#F4F4F5"
-            illuminationColor="#FFFFFF20"
+            primaryHue="oklch(0.58 0.16 158)" // Medium emerald
+            secondaryHue="oklch(0.52 0.17 160)" // Rich emerald
+            borderColor="oklch(0.88 0.015 155)" // Sage border
+            illuminationColor="oklch(0.52 0.17 160 / 0.25)" // Emerald glow
           >
             <div className="p-6 space-y-4">
               {/* Icon */}
-              <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">
+              <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-muted text-muted-foreground">
                 <Icon className="w-5 h-5" />
               </div>
 
@@ -134,9 +134,9 @@ export function KPICards({ projects, isLoading }: KPICardsProps) {
 
               {/* Progress indicator */}
               <div className="mt-4">
-                <div className="h-1.5 bg-zinc-200 dark:bg-zinc-800 rounded-full overflow-hidden">
+                <div className="h-1.5 bg-muted rounded-full overflow-hidden">
                   <div
-                    className="h-full transition-all duration-700 ease-out rounded-full bg-zinc-600 dark:bg-zinc-400"
+                    className="h-full transition-all duration-700 ease-out rounded-full bg-accent"
                     style={{
                       width: `${kpis[Object.keys(kpis)[index] as keyof typeof kpis]}%`,
                     }}
@@ -157,16 +157,16 @@ export function KPICardsSkeleton() {
       {[...Array(3)].map((_, i) => (
         <CursorCard
           key={i}
-          surfaceClassName="bg-white dark:bg-zinc-900"
+          surfaceClassName="bg-card"
           className="relative overflow-hidden"
         >
           <div className="p-6 space-y-4 animate-pulse">
-            <div className="w-10 h-10 rounded-lg bg-zinc-200 dark:bg-zinc-800" />
+            <div className="w-10 h-10 rounded-lg bg-muted" />
             <div className="space-y-2">
-              <div className="h-3 w-3/4 rounded bg-zinc-200 dark:bg-zinc-800" />
-              <div className="h-8 w-1/2 rounded bg-zinc-200 dark:bg-zinc-800" />
+              <div className="h-3 w-3/4 rounded bg-muted" />
+              <div className="h-8 w-1/2 rounded bg-muted" />
             </div>
-            <div className="h-1.5 rounded-full bg-zinc-200 dark:bg-zinc-800 w-full" />
+            <div className="h-1.5 rounded-full bg-muted w-full" />
           </div>
         </CursorCard>
       ))}

@@ -143,11 +143,11 @@ export function CursorCard({
   children,
   className,
   illuminationRadius = 200,
-  illuminationColor = "#FFFFFF10",
-  illuminationOpacity = 0.8,
-  primaryHue = "#93C5FD",
-  secondaryHue = "#2563EB",
-  borderColor = "#E5E5E5",
+  illuminationColor = "oklch(0.52 0.17 160 / 0.18)", // Rich emerald glow
+  illuminationOpacity = 0.85,
+  primaryHue = "oklch(0.58 0.16 158)", // Medium emerald
+  secondaryHue = "oklch(0.52 0.17 160)", // Rich emerald
+  borderColor = "oklch(0.88 0.015 155)", // Sage border
   globalMouseX, // Now MotionValue
   globalMouseY, // Now MotionValue
   surfaceClassName,

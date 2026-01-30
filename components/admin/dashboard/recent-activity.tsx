@@ -50,12 +50,12 @@ export function RecentActivity() {
   return (
     <CursorCardsContainer>
       <CursorCard
-        surfaceClassName="bg-white dark:bg-zinc-900"
-        className="rounded-[1.5rem] shadow-lg shadow-zinc-200/50 dark:shadow-none h-full"
-        primaryHue="#E4E4E7"
-        secondaryHue="#52525B"
-        borderColor="#F4F4F5"
-        illuminationColor="#FFFFFF20"
+        surfaceClassName="bg-card dark:bg-card"
+        className="rounded-[1.5rem] shadow-lg shadow-accent/10 dark:shadow-none h-full"
+        primaryHue="oklch(0.58 0.16 158)" // Medium emerald
+        secondaryHue="oklch(0.52 0.17 160)" // Rich emerald
+        borderColor="oklch(0.88 0.015 155)" // Sage border
+        illuminationColor="oklch(0.52 0.17 160 / 0.2)" // Emerald glow
       >
         <CardHeader className="pt-4 pb-4 border-b border-border/40">
           <div className="flex items-center gap-2">
@@ -74,10 +74,10 @@ export function RecentActivity() {
               <div className="space-y-4">
                 {[1, 2, 3].map((i) => (
                   <div key={i} className="flex gap-3 animate-pulse">
-                    <div className="w-8 h-8 rounded-full bg-zinc-100 dark:bg-zinc-800" />
+                    <div className="w-8 h-8 rounded-full bg-muted" />
                     <div className="space-y-2 flex-1">
-                      <div className="h-3 w-3/4 bg-zinc-100 dark:bg-zinc-800 rounded" />
-                      <div className="h-2 w-1/2 bg-zinc-100 dark:bg-zinc-800 rounded" />
+                      <div className="h-3 w-3/4 bg-muted rounded" />
+                      <div className="h-2 w-1/2 bg-muted rounded" />
                     </div>
                   </div>
                 ))}
@@ -98,15 +98,15 @@ export function RecentActivity() {
                   return (
                     <div
                       key={log.id}
-                      className="py-4 first:pt-0 last:pb-0 hover:bg-zinc-50/50 dark:hover:bg-zinc-800/10 -mx-2 px-2 rounded transition-colors"
+                      className="py-4 first:pt-0 last:pb-0 hover:bg-muted/30 -mx-2 px-2 rounded transition-colors"
                     >
                       <div className="flex gap-3">
                         <div
                           className={cn(
                             "w-8 h-8 rounded-full flex items-center justify-center shrink-0 border",
                             isDone
-                              ? "bg-zinc-100 border-zinc-200 text-zinc-600 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-400"
-                              : "bg-zinc-100 border-zinc-200 text-zinc-600 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-400",
+                              ? "bg-accent/10 border-accent/20 text-accent"
+                              : "bg-muted border-border text-muted-foreground",
                           )}
                         >
                           <Icon className="w-4 h-4" />
@@ -121,7 +121,7 @@ export function RecentActivity() {
                             {log.description || log.title}
                           </p>
                           <div className="flex items-center gap-2 mt-1.5 flex-wrap">
-                            <span className="text-[10px] uppercase font-bold tracking-wider text-muted-foreground/60 bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded-md whitespace-nowrap">
+                            <span className="text-[10px] uppercase font-bold tracking-wider text-muted-foreground/60 bg-muted px-1.5 py-0.5 rounded-md whitespace-nowrap">
                               {log.percentage}%
                             </span>
                             <span className="text-[10px] text-muted-foreground/50 tabular-nums whitespace-nowrap">

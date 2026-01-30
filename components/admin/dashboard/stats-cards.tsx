@@ -95,10 +95,10 @@ export function StatsCards({ stats, isLoading }: StatsCardsProps) {
         return (
           <CursorCard
             key={card.title}
-            surfaceClassName="bg-white dark:bg-zinc-900"
+            surfaceClassName="bg-card dark:bg-card"
             className={cn(
               "relative overflow-hidden group transition-all duration-700",
-              "bg-transparent border-none shadow-[0_4px_20px_rgb(0,0,0,0.03)] dark:shadow-none hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)]",
+              "bg-transparent border-none shadow-[0_4px_20px_oklch(0_0_0_/_0.03)] dark:shadow-none hover:shadow-[0_8px_30px_oklch(0.52_0.17_160_/_0.15)]",
               "rounded-[1rem] hover:-translate-y-0.5",
               // Hide "Selesai" on mobile
               !card.showOnMobile && "hidden sm:block",
@@ -106,10 +106,10 @@ export function StatsCards({ stats, isLoading }: StatsCardsProps) {
             style={{
               animationDelay: `${index * 150}ms`,
             }}
-            primaryHue="#E4E4E7" // Zinc 200
-            secondaryHue="#52525B" // Zinc 600
-            borderColor="#F4F4F5" // Zinc 100
-            illuminationColor="#FFFFFF20"
+            primaryHue="oklch(0.58 0.16 158)" // Medium emerald
+            secondaryHue="oklch(0.52 0.17 160)" // Rich emerald  
+            borderColor="oklch(0.88 0.015 155)" // Sage border
+            illuminationColor="oklch(0.52 0.17 160 / 0.2)" // Emerald glow
           >
             {/* Dynamic Background Accent - Inside CursorCard children */}
             <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-foreground/5 to-transparent rounded-bl-full group-hover:scale-110 transition-transform duration-700 blur-2xl opacity-50" />
@@ -117,12 +117,12 @@ export function StatsCards({ stats, isLoading }: StatsCardsProps) {
 
             <CardContent className="p-3 sm:p-4 relative z-10 flex flex-col justify-between h-full min-h-[90px]">
               <div className="flex items-start justify-between gap-3">
-                <div className="p-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-foreground/80 shadow-sm group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
+                <div className="p-1.5 rounded-lg bg-muted text-foreground/80 shadow-sm group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
                   <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
                 </div>
 
                 {/* Status Indicator */}
-                <div className="h-1 w-1 rounded-full bg-green-500 shadow-[0_0_8px_rgb(34,197,94,0.5)] animate-pulse" />
+                <div className="h-1 w-1 rounded-full bg-accent shadow-[0_0_8px_oklch(0.52_0.17_160_/_0.5)] animate-pulse" />
               </div>
 
               <div className="space-y-0.5 mt-2">

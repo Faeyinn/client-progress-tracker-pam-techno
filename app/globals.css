@@ -47,126 +47,147 @@
 }
 
 :root {
-  --radius: 0.5rem; /* Sharper radius */
+  --radius: 0.625rem;
 
-  /* Monochromatic Black & White Palette - Light Mode */
-  --background: oklch(1 0 0);
-  --foreground: oklch(0 0 0);
+  /* ═══════════════════════════════════════════════════════════════════════════
+     PREMIUM EMERALD + DEEP SLATE — LIGHT MODE
+     Aesthetic, elegant, professional color palette
+     ═══════════════════════════════════════════════════════════════════════════ */
 
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0 0 0);
+  /* Background - Soft white with subtle sage hint */
+  --background: oklch(0.985 0.008 155); /* Soft white + sage undertone */
+  --foreground: oklch(0.18 0.015 255); /* Deep slate text */
 
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0 0 0);
+  /* Cards - Clean elevated surfaces */
+  --card: oklch(0.995 0.005 155); /* Off-white with sage whisper */
+  --card-foreground: oklch(0.18 0.015 255);
 
-  /* Primary - Pure Black */
-  --primary: oklch(0 0 0);
-  --primary-foreground: oklch(1 0 0);
+  /* Popover */
+  --popover: oklch(0.995 0.005 155);
+  --popover-foreground: oklch(0.18 0.015 255);
 
-  /* Secondary - Light Gray */
-  --secondary: oklch(0.96 0 0);
-  --secondary-foreground: oklch(0 0 0);
+  /* Primary - Deep Slate (Elegant Dark) */
+  --primary: oklch(0.22 0.02 255); /* Deep slate - elegant, authoritative */
+  --primary-foreground: oklch(0.98 0.005 155);
 
-  /* Muted - Soft Gray */
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.45 0 0);
+  /* Secondary - Muted Sage */
+  --secondary: oklch(0.94 0.025 155); /* Soft sage surface */
+  --secondary-foreground: oklch(0.22 0.015 255);
 
-  /* Accent - very subtle hover state */
-  --accent: oklch(0.96 0 0);
-  --accent-foreground: oklch(0 0 0);
+  /* Muted - Soft Sage Neutral */
+  --muted: oklch(0.95 0.015 155); /* Gentle sage background */
+  --muted-foreground: oklch(0.45 0.02 155); /* Sage-tinted muted text */
 
-  /* Destructive */
-  --destructive: oklch(
-    0.4 0 0
-  ); /* Dark red equivalent in monochrome, keeping slight red for semantic error if needed but ideally handled by icon */
-  --destructive-foreground: oklch(1 0 0);
+  /* Accent - Rich Emerald (Sophisticated & Luxurious) */
+  --accent: oklch(0.52 0.17 160); /* Rich emerald - premium CTA */
+  --accent-foreground: oklch(0.98 0.005 155);
 
-  /* Borders & Inputs */
-  --border: oklch(0.92 0 0);
-  --input: oklch(0.92 0 0);
-  --ring: oklch(0 0 0);
+  /* Destructive - Sophisticated Red */
+  --destructive: oklch(0.50 0.20 25); /* Muted, elegant red */
+  --destructive-foreground: oklch(0.98 0 0);
 
-  /* Chart Colors - Grayscale */
-  --chart-1: oklch(0.1 0 0);
-  --chart-2: oklch(0.3 0 0);
-  --chart-3: oklch(0.5 0 0);
-  --chart-4: oklch(0.7 0 0);
-  --chart-5: oklch(0.9 0 0);
+  /* Borders & Inputs - Subtle sage undertones */
+  --border: oklch(0.88 0.015 155); /* Sage-tinted border */
+  --input: oklch(0.92 0.012 155); /* Sage input background */
+  --ring: oklch(0.52 0.17 160); /* Emerald focus ring */
+
+  /* Chart Colors - Emerald Spectrum with Gold Accent */
+  --chart-1: oklch(0.52 0.17 160); /* Rich emerald */
+  --chart-2: oklch(0.58 0.16 158); /* Medium emerald */
+  --chart-3: oklch(0.42 0.14 162); /* Deep emerald */
+  --chart-4: oklch(0.65 0.14 155); /* Light emerald */
+  --chart-5: oklch(0.72 0.15 85); /* Gold accent - premium highlight */
+
+  /* Gold Accent - For premium decorative elements */
+  --gold: oklch(0.72 0.15 85);
+  --gold-muted: oklch(0.78 0.10 85);
 
   /* Sidebar */
-  --sidebar: oklch(1 0 0);
-  --sidebar-foreground: oklch(0 0 0);
-  --sidebar-primary: oklch(0 0 0);
-  --sidebar-primary-foreground: oklch(1 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0 0 0);
-  --sidebar-border: oklch(0.92 0 0);
-  --sidebar-ring: oklch(0 0 0);
+  --sidebar: oklch(0.98 0.008 155);
+  --sidebar-foreground: oklch(0.22 0.015 255);
+  --sidebar-primary: oklch(0.52 0.17 160); /* Emerald */
+  --sidebar-primary-foreground: oklch(0.98 0.005 155);
+  --sidebar-accent: oklch(0.94 0.025 155); /* Sage */
+  --sidebar-accent-foreground: oklch(0.22 0.015 255);
+  --sidebar-border: oklch(0.88 0.015 155);
+  --sidebar-ring: oklch(0.52 0.17 160);
 
-  /* Status Colors */
-  --status-progress: oklch(0.6 0 0);
-  --status-done: oklch(0 0 0);
-  --status-urgent: oklch(0.2 0 0);
+  /* Status Colors - Sophisticated */
+  --status-progress: oklch(0.58 0.14 200); /* Teal progress */
+  --status-done: oklch(0.52 0.17 160); /* Emerald success */
+  --status-urgent: oklch(0.72 0.15 85); /* Gold warning - premium */
 }
 
 .dark {
   --radius: 0.75rem;
 
-  /* Monochromatic Black & White Palette - Light Mode */
-  --background: oklch(0.99 0 0);
-  --foreground: oklch(0.1 0 0);
+  /* ═══════════════════════════════════════════════════════════════════════════
+     PREMIUM EMERALD + DEEP SLATE — DARK MODE
+     Luxurious, sophisticated, elevated surfaces
+     ═══════════════════════════════════════════════════════════════════════════ */
 
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.1 0 0);
+  /* Background - Deep premium slate (not plain black) */
+  --background: oklch(0.14 0.015 255); /* Premium deep slate */
+  --foreground: oklch(0.94 0.008 155); /* Soft white with sage warmth */
 
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.1 0 0);
+  /* Cards - Elevated slate surfaces for depth */
+  --card: oklch(0.18 0.018 255); /* Elevated slate - lighter than bg */
+  --card-foreground: oklch(0.94 0.008 155);
 
-  /* Primary - Pure Black */
-  --primary: oklch(0.15 0 0);
-  --primary-foreground: oklch(0.99 0 0);
+  /* Popover */
+  --popover: oklch(0.16 0.016 255);
+  --popover-foreground: oklch(0.94 0.008 155);
 
-  /* Secondary - Light Gray */
-  --secondary: oklch(0.96 0 0);
-  --secondary-foreground: oklch(0.15 0 0);
+  /* Primary - Vibrant Emerald (eye-catching in dark) */
+  --primary: oklch(0.65 0.19 160); /* Vibrant emerald - hero color */
+  --primary-foreground: oklch(0.12 0.01 255);
 
-  /* Muted - Soft Gray */
-  --muted: oklch(0.96 0 0);
-  --muted-foreground: oklch(0.45 0 0);
+  /* Secondary - Deep Sage */
+  --secondary: oklch(0.22 0.025 160); /* Dark sage surface */
+  --secondary-foreground: oklch(0.88 0.01 155);
 
-  /* Accent - Very Light Gray */
-  --accent: oklch(0.94 0 0);
-  --accent-foreground: oklch(0.15 0 0);
+  /* Muted - Subtle Elevated Slate */
+  --muted: oklch(0.20 0.015 255); /* Dark muted slate */
+  --muted-foreground: oklch(0.58 0.02 155); /* Sage-tinted muted text */
 
-  /* Destructive - Monochrome */
-  --destructive: oklch(0.35 0 0);
+  /* Accent - Rich Emerald with glow potential */
+  --accent: oklch(0.24 0.04 160); /* Dark emerald surface */
+  --accent-foreground: oklch(0.70 0.18 160); /* Bright emerald text */
 
-  /* Borders & Inputs */
-  --border: oklch(0.88 0 0);
-  --input: oklch(0.92 0 0);
-  --ring: oklch(0.3 0 0);
+  /* Destructive */
+  --destructive: oklch(0.55 0.18 25);
+  --destructive-foreground: oklch(0.12 0 0);
 
-  /* Chart Colors - Grayscale */
-  --chart-1: oklch(0.2 0 0);
-  --chart-2: oklch(0.35 0 0);
-  --chart-3: oklch(0.5 0 0);
-  --chart-4: oklch(0.65 0 0);
-  --chart-5: oklch(0.8 0 0);
+  /* Borders & Inputs - Subtle slate definition */
+  --border: oklch(0.26 0.02 255); /* Refined slate border */
+  --input: oklch(0.20 0.015 255);
+  --ring: oklch(0.65 0.19 160); /* Vibrant emerald focus */
+
+  /* Chart Colors - Rich vibrant tones */
+  --chart-1: oklch(0.62 0.18 160); /* Vibrant emerald */
+  --chart-2: oklch(0.58 0.16 190); /* Teal */
+  --chart-3: oklch(0.68 0.15 155); /* Light emerald */
+  --chart-4: oklch(0.75 0.16 85); /* Bright gold */
+  --chart-5: oklch(0.55 0.14 200); /* Deep cyan */
+
+  /* Gold Accent - Premium decorative touches */
+  --gold: oklch(0.75 0.16 85);
+  --gold-muted: oklch(0.65 0.12 85);
 
   /* Sidebar */
-  --sidebar: oklch(0.99 0 0);
-  --sidebar-foreground: oklch(0.1 0 0);
-  --sidebar-primary: oklch(0.15 0 0);
-  --sidebar-primary-foreground: oklch(0.99 0 0);
-  --sidebar-accent: oklch(0.96 0 0);
-  --sidebar-accent-foreground: oklch(0.15 0 0);
-  --sidebar-border: oklch(0.9 0 0);
-  --sidebar-ring: oklch(0.3 0 0);
+  --sidebar: oklch(0.16 0.015 255); /* Slightly elevated from bg */
+  --sidebar-foreground: oklch(0.88 0.008 155);
+  --sidebar-primary: oklch(0.65 0.19 160); /* Vibrant emerald */
+  --sidebar-primary-foreground: oklch(0.12 0 0);
+  --sidebar-accent: oklch(0.22 0.025 160); /* Dark sage */
+  --sidebar-accent-foreground: oklch(0.88 0.01 155);
+  --sidebar-border: oklch(0.22 0.015 255);
+  --sidebar-ring: oklch(0.65 0.19 160);
 
-  /* Status Colors - Minimal accent */
-  --status-progress: oklch(0.55 0 0);
-  --status-done: oklch(0.3 0 0);
-  --status-urgent: oklch(0.4 0 0);
+  /* Status Colors */
+  --status-progress: oklch(0.62 0.16 200); /* Bright teal */
+  --status-done: oklch(0.65 0.19 160); /* Vibrant emerald */
+  --status-urgent: oklch(0.75 0.16 85); /* Warm gold */
 }
 
 @layer base {
@@ -194,20 +215,75 @@
 }
 
 @layer utilities {
-  /* Glassmorphism */
+  /* Glassmorphism - Updated with sage tint */
   .glass {
-    @apply bg-background/80 backdrop-blur-xl border-foreground/5;
+    @apply bg-background/80 backdrop-blur-xl border border-border/30;
   }
 
   .glass-card {
-    @apply bg-card/80 backdrop-blur-xl border border-border/50 shadow-lg;
+    @apply bg-card/85 backdrop-blur-xl border border-border/40 shadow-lg;
   }
 
-  /* Dot Grid Pattern - Denser and sharper */
+  /* Emerald Glow Effects - For dark mode hover/active states */
+  .glow-emerald {
+    box-shadow:
+      0 0 20px oklch(0.52 0.17 160 / 0.15),
+      0 0 40px oklch(0.52 0.17 160 / 0.08);
+  }
+
+  .dark .glow-emerald {
+    box-shadow:
+      0 0 25px oklch(0.65 0.19 160 / 0.25),
+      0 0 50px oklch(0.65 0.19 160 / 0.15),
+      0 0 80px oklch(0.65 0.19 160 / 0.08);
+  }
+
+  /* Gold Accent Glow - For premium elements */
+  .glow-gold {
+    box-shadow:
+      0 0 15px oklch(0.72 0.15 85 / 0.2),
+      0 0 30px oklch(0.72 0.15 85 / 0.1);
+  }
+
+  .dark .glow-gold {
+    box-shadow:
+      0 0 20px oklch(0.75 0.16 85 / 0.3),
+      0 0 40px oklch(0.75 0.16 85 / 0.15);
+  }
+
+  /* Gold Text Gradient - Premium touch */
+  .text-gold-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, oklch(0.78 0.12 85), oklch(0.68 0.15 85));
+  }
+
+  .dark .text-gold-gradient {
+    background-image: linear-gradient(135deg, oklch(0.80 0.14 85), oklch(0.72 0.16 85));
+  }
+
+  /* Emerald Gradient - For CTAs and highlights */
+  .bg-emerald-gradient {
+    background: linear-gradient(135deg, oklch(0.52 0.17 160), oklch(0.48 0.15 165));
+  }
+
+  .dark .bg-emerald-gradient {
+    background: linear-gradient(135deg, oklch(0.65 0.19 160), oklch(0.58 0.17 165));
+  }
+
+  /* Premium Border with gold accent */
+  .border-gold-accent {
+    border-image: linear-gradient(135deg, oklch(0.72 0.15 85 / 0.4), transparent 60%) 1;
+  }
+
+  .dark .border-gold-accent {
+    border-image: linear-gradient(135deg, oklch(0.75 0.16 85 / 0.5), transparent 60%) 1;
+  }
+
+  /* Dot Grid Pattern - Sage tinted */
   .bg-dot-grid {
     background-image:
-      radial-gradient(circle, oklch(0 0 0 / 0.15) 1.5px, transparent 1.5px),
-      radial-gradient(circle, oklch(0 0 0 / 0.05) 1px, transparent 1px);
+      radial-gradient(circle, oklch(0.22 0.02 255 / 0.12) 1.5px, transparent 1.5px),
+      radial-gradient(circle, oklch(0.22 0.02 255 / 0.05) 1px, transparent 1px);
     background-size:
       32px 32px,
       8px 8px;
@@ -216,30 +292,36 @@
 
   .dark .bg-dot-grid {
     background-image:
-      radial-gradient(circle, oklch(1 1 1 / 0.15) 1.5px, transparent 1.5px),
-      radial-gradient(circle, oklch(1 1 1 / 0.05) 1px, transparent 1px);
+      radial-gradient(circle, oklch(0.94 0.01 155 / 0.12) 1.5px, transparent 1.5px),
+      radial-gradient(circle, oklch(0.94 0.01 155 / 0.05) 1px, transparent 1px);
   }
 
   /* Secondary Grid for visual density */
   .bg-grid-lines {
     background-size: 40px 40px;
     background-image:
-      linear-gradient(to right, oklch(0 0 0 / 0.03) 1px, transparent 1px),
-      linear-gradient(to bottom, oklch(0 0 0 / 0.03) 1px, transparent 1px);
+      linear-gradient(to right, oklch(0.22 0.02 255 / 0.04) 1px, transparent 1px),
+      linear-gradient(to bottom, oklch(0.22 0.02 255 / 0.04) 1px, transparent 1px);
     mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
   }
 
-  /* Subtle glow for dark mode */
+  .dark .bg-grid-lines {
+    background-image:
+      linear-gradient(to right, oklch(0.94 0.01 155 / 0.06) 1px, transparent 1px),
+      linear-gradient(to bottom, oklch(0.94 0.01 155 / 0.06) 1px, transparent 1px);
+  }
+
+  /* Subtle glow for primary elements */
   .glow-primary {
     box-shadow:
-      0 0 25px oklch(0.15 0 0 / 0.15),
-      0 0 50px oklch(0.15 0 0 / 0.05);
+      0 0 25px oklch(0.22 0.02 255 / 0.12),
+      0 0 50px oklch(0.22 0.02 255 / 0.05);
   }
 
   .dark .glow-primary {
     box-shadow:
-      0 0 25px oklch(0.95 0 0 / 0.15),
-      0 0 50px oklch(0.95 0 0 / 0.08);
+      0 0 25px oklch(0.94 0.008 155 / 0.12),
+      0 0 50px oklch(0.94 0.008 155 / 0.06);
   }
 
   /* Touch-friendly target size */
@@ -247,16 +329,43 @@
     @apply min-h-11 min-w-11;
   }
 
-  /* Card hover lift effect */
+  /* Card hover lift effect with emerald shadow */
   .hover-lift {
     @apply transition-all duration-300 ease-out;
   }
 
   .hover-lift:hover {
-    @apply -translate-y-1 shadow-xl;
+    @apply -translate-y-1;
+    box-shadow: 
+      0 20px 40px -15px oklch(0.22 0.02 255 / 0.15),
+      0 8px 16px -8px oklch(0.22 0.02 255 / 0.1);
   }
 
-  /* Skeleton loading animation */
+  .dark .hover-lift:hover {
+    box-shadow: 
+      0 20px 40px -15px oklch(0 0 0 / 0.5),
+      0 8px 16px -8px oklch(0.65 0.19 160 / 0.15);
+  }
+
+  /* Premium card with emerald accent border on hover */
+  .card-premium {
+    @apply relative overflow-hidden transition-all duration-300;
+  }
+
+  .card-premium::before {
+    content: "";
+    @apply absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-transparent to-transparent transition-all duration-300;
+  }
+
+  .card-premium:hover::before {
+    @apply bg-gradient-to-r from-transparent via-accent to-transparent;
+  }
+
+  .dark .card-premium:hover::before {
+    box-shadow: 0 0 20px oklch(0.65 0.19 160 / 0.4);
+  }
+
+  /* Skeleton loading animation - sage tinted */
   .skeleton {
     @apply relative overflow-hidden bg-muted rounded;
   }
@@ -267,7 +376,7 @@
     background: linear-gradient(
       90deg,
       transparent,
-      oklch(1 0 0 / 0.08),
+      oklch(0.94 0.015 155 / 0.12),
       transparent
     );
     animation: skeleton-shimmer 1.5s ease-in-out infinite;
@@ -277,17 +386,18 @@
     background: linear-gradient(
       90deg,
       transparent,
-      oklch(1 0 0 / 0.04),
+      oklch(0.65 0.19 160 / 0.08),
       transparent
     );
   }
 
-  /* Progress bar animation */
+  /* Progress bar animation with emerald */
   .progress-animated {
     animation: progress-fill 1s ease-out forwards;
+    @apply bg-accent;
   }
 
-  /* Pulse dot */
+  /* Pulse dot - emerald themed */
   .pulse-dot {
     @apply relative;
   }
@@ -464,5 +574,44 @@
   100% {
     transform: rotate(215deg) translateX(-500px);
     opacity: 0;
+  }
+}
+
+/* Shimmer sweep animation for bling effect */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%) translateY(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(100%) translateY(100%) rotate(45deg);
+  }
+}
+
+/* Twinkle animation for sparkle dots */
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+/* Glow pulse for accent lines */
+@keyframes glow-pulse {
+
+  @keyframes slide-shine {
+    0% { left: -150%; }
+    100% { left: 150%; }
+  }
+  0%, 100% {
+    opacity: 0.8;
+    filter: brightness(1);
+  }
+  50% {
+    opacity: 1;
+    filter: brightness(1.3);
   }
 }

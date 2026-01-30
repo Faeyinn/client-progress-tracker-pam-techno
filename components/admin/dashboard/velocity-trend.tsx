@@ -67,12 +67,12 @@ export function VelocityTrend({ projects }: VelocityTrendProps) {
   return (
     <CursorCardsContainer>
       <CursorCard
-        surfaceClassName="bg-white dark:bg-zinc-900"
-        className="rounded-[1.5rem] shadow-lg shadow-zinc-200/50 dark:shadow-none"
-        primaryHue="#E4E4E7"
-        secondaryHue="#52525B"
-        borderColor="#F4F4F5"
-        illuminationColor="#FFFFFF20"
+        surfaceClassName="bg-card dark:bg-card"
+        className="rounded-[1.5rem] shadow-lg shadow-accent/10 dark:shadow-none"
+        primaryHue="oklch(0.58 0.16 158)" // Medium emerald
+        secondaryHue="oklch(0.52 0.17 160)" // Rich emerald
+        borderColor="oklch(0.88 0.015 155)" // Sage border
+        illuminationColor="oklch(0.52 0.17 160 / 0.2)" // Emerald glow
       >
         <CardHeader className="pt-4 pb-4">
           <CardTitle className="text-lg font-black tracking-tight uppercase text-foreground">
@@ -96,26 +96,26 @@ export function VelocityTrend({ projects }: VelocityTrendProps) {
               >
                 <defs>
                   <linearGradient id="colorVelocity" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#06B6D4" stopOpacity={0.8} />
-                    <stop offset="95%" stopColor="#06B6D4" stopOpacity={0} />
+                    <stop offset="5%" stopColor="oklch(0.52 0.17 160)" stopOpacity={0.7} />
+                    <stop offset="95%" stopColor="oklch(0.52 0.17 160)" stopOpacity={0} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid
                   strokeDasharray="3 3"
                   vertical={false}
-                  stroke="#27272a"
-                  opacity={0.1}
+                  stroke="oklch(0.45 0.02 155)"
+                  opacity={0.15}
                 />
                 <XAxis
                   dataKey="name"
-                  stroke="#71717a"
+                  stroke="oklch(0.45 0.02 155)"
                   fontSize={12}
                   tickLine={false}
                   axisLine={false}
                   tickMargin={10}
                 />
                 <YAxis
-                  stroke="#71717a"
+                  stroke="oklch(0.45 0.02 155)"
                   fontSize={12}
                   tickLine={false}
                   axisLine={false}
@@ -126,24 +126,24 @@ export function VelocityTrend({ projects }: VelocityTrendProps) {
                     if (active && payload && payload.length) {
                       const dataItem = payload[0].payload;
                       return (
-                        <div className="rounded-xl border border-border bg-background/80 backdrop-blur-sm p-3 shadow-xl">
-                          <p className="text-xs font-bold text-foreground mb-2 opacity-70">
+                        <div className="rounded-xl border border-border bg-card/95 backdrop-blur-md p-4 shadow-xl">
+                          <p className="text-xs font-bold text-foreground mb-3 opacity-70">
                             {dataItem.fullName}
                           </p>
                           <div className="grid grid-cols-2 gap-4">
                             <div className="flex flex-col">
-                              <span className="text-[10px] uppercase text-cyan-600/70 dark:text-cyan-400/70 font-bold">
+                              <span className="text-[10px] uppercase text-accent/80 font-bold tracking-wide">
                                 Velocity
                               </span>
-                              <span className="text-lg font-bold text-cyan-600 dark:text-cyan-400">
+                              <span className="text-xl font-black text-accent">
                                 {payload[0].value} proj
                               </span>
                             </div>
                             <div className="flex flex-col">
-                              <span className="text-[10px] uppercase text-purple-600/70 dark:text-purple-400/70 font-bold">
+                              <span className="text-[10px] uppercase text-chart-5/80 font-bold tracking-wide">
                                 Avg Progress
                               </span>
-                              <span className="text-lg font-bold text-purple-600 dark:text-purple-400">
+                              <span className="text-xl font-black text-chart-5">
                                 {payload[1].value}%
                               </span>
                             </div>
@@ -158,20 +158,20 @@ export function VelocityTrend({ projects }: VelocityTrendProps) {
                 <Line
                   type="monotone"
                   dataKey="velocity"
-                  stroke="#06B6D4"
-                  strokeWidth={2}
-                  dot={{ r: 4 }}
-                  activeDot={{ r: 6 }}
+                  stroke="oklch(0.52 0.17 160)"
+                  strokeWidth={2.5}
+                  dot={{ r: 4, fill: "oklch(0.52 0.17 160)" }}
+                  activeDot={{ r: 6, fill: "oklch(0.52 0.17 160)" }}
                   name="Kecepatan Penyelesaian"
                   animationDuration={1500}
                 />
                 <Line
                   type="monotone"
                   dataKey="avgProgress"
-                  stroke="#A855F7"
-                  strokeWidth={2}
-                  dot={{ r: 4 }}
-                  activeDot={{ r: 6 }}
+                  stroke="oklch(0.72 0.15 85)"
+                  strokeWidth={2.5}
+                  dot={{ r: 4, fill: "oklch(0.72 0.15 85)" }}
+                  activeDot={{ r: 6, fill: "oklch(0.72 0.15 85)" }}
                   name="Rata-rata Progress (%)"
                   animationDuration={1500}
                 />

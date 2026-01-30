@@ -38,12 +38,12 @@ export function PhoneChangeWarningDialog({
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <AlertTriangle className="w-5 h-5 text-amber-600" />
+            <AlertTriangle className="w-5 h-5 text-chart-5" />
             Peringatan Perubahan Nomor
           </DialogTitle>
           <DialogDescription className="space-y-3 pt-2">
             <p>Nomor WhatsApp akan diubah dari:</p>
-            <div className="bg-gray-100 p-3 rounded-lg space-y-1">
+            <div className="bg-muted p-3 rounded-lg space-y-1">
               <p className="text-sm">
                 <span className="font-semibold">Nomor Lama:</span>{" "}
                 {originalPhone}
@@ -52,7 +52,7 @@ export function PhoneChangeWarningDialog({
                 <span className="font-semibold">Nomor Baru:</span> {newPhone}
               </p>
             </div>
-            <p className="text-amber-700 font-medium">
+            <p className="text-chart-5 font-medium">
               ⚠️ Nomor lama tidak akan bisa recovery token lagi.
             </p>
           </DialogDescription>
@@ -80,7 +80,7 @@ export function PhoneChangeWarningDialog({
           <Button
             onClick={onConfirm}
             disabled={isSubmitting}
-            className="bg-black hover:bg-gray-800 text-white shadow-sm hover:shadow-md transition-all duration-200"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm hover:shadow-md transition-all duration-200"
           >
             {isSubmitting ? (
               <>

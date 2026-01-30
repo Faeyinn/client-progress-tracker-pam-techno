@@ -70,13 +70,13 @@ export function RecentProjectsWidget({
 
   const getAvatarColor = (name: string) => {
     const colors = [
-      "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400",
-      "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400",
-      "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400",
-      "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400",
-      "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400",
-      "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400",
-      "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400",
+      "bg-accent/10 text-accent",
+      "bg-chart-4/10 text-chart-4",
+      "bg-chart-5/10 text-chart-5",
+      "bg-muted text-muted-foreground",
+      "bg-accent/15 text-accent",
+      "bg-chart-4/15 text-chart-4",
+      "bg-chart-5/15 text-chart-5",
     ];
     let hash = 0;
     for (let i = 0; i < name.length; i++) {
@@ -88,12 +88,12 @@ export function RecentProjectsWidget({
   return (
     <CursorCardsContainer>
       <CursorCard
-        surfaceClassName="bg-white dark:bg-zinc-900"
-        className="rounded-[1.5rem] shadow-lg shadow-zinc-200/50 dark:shadow-none h-full"
-        primaryHue="#E4E4E7"
-        secondaryHue="#52525B"
-        borderColor="#F4F4F5"
-        illuminationColor="#FFFFFF20"
+        surfaceClassName="bg-card dark:bg-card"
+        className="rounded-[1.5rem] shadow-lg shadow-accent/10 dark:shadow-none h-full"
+        primaryHue="oklch(0.58 0.16 158)" // Medium emerald
+        secondaryHue="oklch(0.52 0.17 160)" // Rich emerald
+        borderColor="oklch(0.88 0.015 155)" // Sage border
+        illuminationColor="oklch(0.52 0.17 160 / 0.2)" // Emerald glow
       >
         <CardHeader className="pt-6 pb-4 border-b border-border/40">
           <div className="flex flex-col gap-4">
@@ -154,10 +154,10 @@ export function RecentProjectsWidget({
               <div className="p-6 space-y-4">
                 {[1, 2, 3].map((i) => (
                   <div key={i} className="flex gap-4 animate-pulse">
-                    <div className="w-10 h-10 rounded-xl bg-zinc-100 dark:bg-zinc-800" />
+                    <div className="w-10 h-10 rounded-xl bg-muted" />
                     <div className="space-y-2 flex-1">
-                      <div className="h-4 w-3/4 bg-zinc-100 dark:bg-zinc-800 rounded" />
-                      <div className="h-3 w-1/2 bg-zinc-100 dark:bg-zinc-800 rounded" />
+                      <div className="h-4 w-3/4 bg-muted rounded" />
+                      <div className="h-3 w-1/2 bg-muted rounded" />
                     </div>
                   </div>
                 ))}
@@ -183,7 +183,7 @@ export function RecentProjectsWidget({
                 <Link
                   key={project.id}
                   href={`/admin/projects/${project.id}`}
-                  className="flex items-center gap-4 p-4 hover:bg-zinc-50/50 dark:hover:bg-zinc-800/10 transition-colors group cursor-pointer"
+                  className="flex items-center gap-4 p-4 hover:bg-muted/30 transition-colors group cursor-pointer"
                 >
                   <div
                     className={cn(
@@ -194,7 +194,7 @@ export function RecentProjectsWidget({
                     {getInitials(project.clientName)}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h4 className="font-bold text-sm text-foreground truncate group-hover:text-primary transition-colors">
+                    <h4 className="font-bold text-sm text-foreground truncate group-hover:text-accent transition-colors">
                       {project.projectName}
                     </h4>
                     <p className="text-xs text-muted-foreground truncate">
@@ -206,8 +206,8 @@ export function RecentProjectsWidget({
                       className={cn(
                         "text-[10px] uppercase font-bold tracking-wider px-2 py-1 rounded-md",
                         project.status === "Done"
-                          ? "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400"
-                          : "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400",
+                          ? "bg-accent/10 text-accent"
+                          : "bg-muted text-muted-foreground",
                       )}
                     >
                       {project.status === "Done"

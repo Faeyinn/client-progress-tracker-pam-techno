@@ -269,7 +269,7 @@ export function ProjectTable({
   if (projects.length === 0) {
     return (
       <div className="text-center py-20 px-4 rounded-[1.5rem] border-2 border-dashed border-border/40 bg-muted/5 mt-4">
-        <div className="w-24 h-24 rounded-3xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center mx-auto mb-6 shadow-inner">
+        <div className="w-24 h-24 rounded-3xl bg-muted flex items-center justify-center mx-auto mb-6 shadow-inner">
           <FolderKanban className="w-10 h-10 text-muted-foreground/30" />
         </div>
         <h3 className="text-xl font-bold text-foreground mb-2">
@@ -299,7 +299,7 @@ export function ProjectTable({
           <Card
             key={project.id}
             className={cn(
-              "border-none bg-zinc-50 dark:bg-zinc-900 shadow-sm cursor-pointer relative overflow-hidden",
+              "border-none bg-card shadow-sm cursor-pointer relative overflow-hidden",
               "transition-all duration-300 hover:shadow-lg active:scale-[0.98]",
               "rounded-[1.5rem]",
             )}
@@ -311,8 +311,8 @@ export function ProjectTable({
               className={cn(
                 "absolute top-0 bottom-0 left-0 w-1.5",
                 project.status === "Done"
-                  ? "bg-zinc-800 dark:bg-zinc-200"
-                  : "bg-green-500",
+                  ? "bg-accent"
+                  : "bg-chart-4",
               )}
             />
 
@@ -326,8 +326,8 @@ export function ProjectTable({
                       className={cn(
                         "text-[9px] font-black uppercase tracking-wider h-5 px-2 rounded-md",
                         project.status === "Done"
-                          ? "bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400"
-                          : "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400",
+                          ? "bg-accent/10 text-accent"
+                          : "bg-chart-4/10 text-chart-4",
                       )}
                     >
                       {project.status === "Done" ? "Selesai" : "On Progress"}
@@ -428,7 +428,7 @@ export function ProjectTable({
                   </div>
                   <Progress
                     value={project.progress}
-                    className="h-1.5 bg-zinc-100 dark:bg-zinc-800"
+                    className="h-1.5 bg-muted"
                   />
                 </div>
               </div>
@@ -440,16 +440,16 @@ export function ProjectTable({
       {/* Desktop: Enhanced Table */}
       <CursorCardsContainer className="hidden md:block">
         <CursorCard
-          surfaceClassName="bg-white dark:bg-zinc-950/50"
+          surfaceClassName="bg-card dark:bg-card"
           className="overflow-hidden rounded-[1.5rem] shadow-sm"
-          primaryHue="#E4E4E7" // Zinc 200
-          secondaryHue="#52525B" // Zinc 600
-          borderColor="#F4F4F5" // Zinc 100
-          illuminationColor="#FFFFFF20"
+          primaryHue="oklch(0.58 0.16 158)" // Medium emerald
+          secondaryHue="oklch(0.52 0.17 160)" // Rich emerald
+          borderColor="oklch(0.88 0.015 155)" // Sage border
+          illuminationColor="oklch(0.52 0.17 160 / 0.2)" // Emerald glow
         >
         <Table>
           <TableHeader>
-            <TableRow className="bg-zinc-50/50 dark:bg-zinc-900/50 hover:bg-zinc-50/80 border-b border-border/40">
+            <TableRow className="bg-muted/30 hover:bg-muted/50 border-b border-border/40">
               <TableHead 
                 className="py-5 pl-8 font-black text-xs uppercase tracking-[0.15em] text-muted-foreground/70 cursor-pointer hover:text-foreground transition-colors select-none"
                 onClick={() => handleSort('clientName')}
@@ -532,7 +532,7 @@ export function ProjectTable({
                       "flex items-center gap-2 text-sm",
                       isDeadlineUrgent(project.deadline) &&
                         project.status !== "Done"
-                        ? "text-red-500 font-bold"
+                        ? "text-destructive font-bold"
                         : "text-muted-foreground font-medium",
                     )}
                   >
@@ -557,8 +557,8 @@ export function ProjectTable({
                     className={cn(
                       "text-[9px] font-black uppercase tracking-wider py-1 px-2.5 rounded-lg border-none shadow-sm",
                       project.status === "Done"
-                        ? "bg-zinc-900 text-zinc-100 dark:bg-zinc-100 dark:text-zinc-900"
-                        : "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
+                        ? "bg-accent text-accent-foreground"
+                        : "bg-chart-4/10 text-chart-4",
                     )}
                   >
                     {project.status === "Done" && (
@@ -569,13 +569,13 @@ export function ProjectTable({
                 </TableCell>
                 <TableCell>
                   <div className="flex items-center space-x-3 w-full pr-8">
-                    <div className="flex-1 h-2 bg-zinc-100 dark:bg-zinc-800 rounded-full overflow-hidden">
+                    <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
                       <div
                         className={cn(
                           "h-full rounded-full transition-all duration-1000 ease-out",
                           project.progress === 100
-                            ? "bg-zinc-900 dark:bg-zinc-100"
-                            : "bg-green-500",
+                            ? "bg-accent"
+                            : "bg-chart-4",
                         )}
                         style={{ width: `${project.progress}%` }}
                       />
@@ -595,7 +595,7 @@ export function ProjectTable({
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="h-8 w-8 p-0 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                          className="h-8 w-8 p-0 rounded-full hover:bg-muted"
                         >
                           <MoreVertical className="w-4 h-4" />
                         </Button>
@@ -640,7 +640,7 @@ export function ProjectTable({
 
         {/* Pagination Controls */}
         {totalPages > 1 && (
-          <div className="flex items-center justify-between px-6 py-4 border-t border-border/40 bg-zinc-50/30 dark:bg-zinc-900/30">
+          <div className="flex items-center justify-between px-6 py-4 border-t border-border/40 bg-muted/30">
             <p className="text-xs text-muted-foreground font-medium">
               Menampilkan{" "}
               <strong>
@@ -667,7 +667,7 @@ export function ProjectTable({
                       "w-6 h-6 rounded-md text-[10px] font-bold transition-all",
                       currentPage === i + 1
                         ? "bg-foreground text-background shadow-sm"
-                        : "text-muted-foreground hover:bg-zinc-100 dark:hover:bg-zinc-800",
+                        : "text-muted-foreground hover:bg-muted",
                     )}
                   >
                     {i + 1}
@@ -694,7 +694,7 @@ export function ProjectTable({
       {/* Mobile Pagination (Simplified) */}
       <div className="md:hidden flex justify-center mt-6">
         {totalPages > 1 && (
-          <div className="flex items-center gap-3 bg-white dark:bg-zinc-900 p-2 rounded-full shadow-lg shadow-zinc-200/50 dark:shadow-none border border-border/50">
+          <div className="flex items-center gap-3 bg-card p-2 rounded-full shadow-lg shadow-accent/10 border border-border/50">
             <Button
               variant="ghost"
               size="icon"
@@ -729,8 +729,8 @@ export function ProjectTable({
       >
         <AlertDialogContent className="sm:max-w-[360px] p-6 rounded-[2rem] gap-6">
           <AlertDialogHeader className="space-y-4">
-            <div className="w-16 h-16 rounded-full bg-red-50 dark:bg-red-900/10 flex items-center justify-center mx-auto ring-8 ring-red-50/50 dark:ring-red-900/5">
-              <Trash2 className="w-8 h-8 text-red-500" />
+            <div className="w-16 h-16 rounded-full bg-destructive/10 flex items-center justify-center mx-auto ring-8 ring-destructive/5">
+              <Trash2 className="w-8 h-8 text-destructive" />
             </div>
             <div className="space-y-2 text-center">
               <AlertDialogTitle className="text-xl font-black tracking-tight">
@@ -743,7 +743,7 @@ export function ProjectTable({
             </div>
           </AlertDialogHeader>
           <AlertDialogFooter className="sm:justify-center gap-3 grid grid-cols-2">
-            <AlertDialogCancel className="w-full rounded-xl h-12 border-none bg-zinc-100 dark:bg-zinc-800 font-bold hover:bg-zinc-200 dark:hover:bg-zinc-700 mt-0">
+            <AlertDialogCancel className="w-full rounded-xl h-12 border-none bg-muted font-bold hover:bg-muted/80 mt-0">
               Batal
             </AlertDialogCancel>
             <AlertDialogAction
@@ -753,7 +753,7 @@ export function ProjectTable({
                   setProjectToDelete(null);
                 }
               }}
-              className="w-full rounded-xl h-12 bg-red-500 hover:bg-red-600 font-bold text-white shadow-lg shadow-red-500/20"
+              className="w-full rounded-xl h-12 bg-destructive hover:bg-destructive/90 font-bold text-destructive-foreground shadow-lg shadow-destructive/20"
             >
               Ya, Hapus
             </AlertDialogAction>

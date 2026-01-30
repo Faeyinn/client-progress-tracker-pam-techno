@@ -37,7 +37,7 @@ export function HeroSection() {
           asChild
           variant="outline"
           size="lg"
-          className="h-14 rounded-full border-border bg-background/50 backdrop-blur-sm hover:bg-neutral-50 px-8 hidden sm:inline-flex text-base transition-colors"
+          className="h-14 rounded-full border-border bg-background/50 backdrop-blur-sm hover:bg-muted px-8 hidden sm:inline-flex text-base transition-colors"
         >
           <a href={waHref} target="_blank" rel="noreferrer">
             Hubungi Support
@@ -54,7 +54,7 @@ export function HeroSection() {
         >
           <path
             fill="currentColor"
-            className="text-neutral-100 dark:text-neutral-900"
+            className="text-accent/20"
             d="M44.7,-76.4C58.9,-69.2,71.8,-59.1,81.6,-46.6C91.4,-34.1,98.1,-19.2,95.8,-4.9C93.5,9.3,82.2,22.9,72.1,35.2C62,47.5,53.1,58.5,42.2,66.4C31.3,74.3,18.4,79.1,4.5,71.3C-9.4,63.5,-24.3,43.2,-38.5,28.8C-52.7,14.4,-66.2,5.9,-70.6,-5.5C-75,-16.9,-70.3,-31.2,-60.7,-42.6C-51.1,-54,-36.6,-62.5,-22,-66.1C-7.4,-69.7,7.3,-68.4,22.3,-66.5Z"
             transform="translate(100 100)"
           />

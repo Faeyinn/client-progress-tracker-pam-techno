@@ -32,19 +32,19 @@ export default function AdminDashboardPage() {
   }, [fetchProjects]);
 
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 transition-colors duration-500">
+    <div className="min-h-screen bg-background transition-colors duration-500">
       <DashboardHeader />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12 pb-24 md:pb-12 space-y-8">
         {/* Page Header - Ultra Compact */}
         <CursorCardsContainer>
           <CursorCard
-            surfaceClassName="bg-white dark:bg-zinc-900"
-            className="rounded-[1.25rem] shadow-lg shadow-zinc-200/50 dark:shadow-none animate-in fade-in slide-in-from-bottom-4 duration-700"
-            primaryHue="#E4E4E7" // Zinc 200
-            secondaryHue="#52525B" // Zinc 600
-            borderColor="#F4F4F5" // Zinc 100
-            illuminationColor="#FFFFFF20"
+            surfaceClassName="bg-card dark:bg-card"
+            className="rounded-[1.25rem] shadow-lg shadow-accent/10 dark:shadow-none animate-in fade-in slide-in-from-bottom-4 duration-700"
+            primaryHue="oklch(0.58 0.16 158)" // Medium emerald
+            secondaryHue="oklch(0.52 0.17 160)" // Rich emerald
+            borderColor="oklch(0.88 0.015 155)" // Sage border
+            illuminationColor="oklch(0.52 0.17 160 / 0.2)" // Emerald glow
           >
             <div className="flex flex-col gap-1 relative overflow-hidden p-3 sm:p-4">
               <div className="absolute top-0 right-0 p-4 opacity-10 dark:opacity-[0.03]">
@@ -52,7 +52,7 @@ export default function AdminDashboardPage() {
               </div>
 
               <div className="flex items-center gap-4 relative z-10">
-                <div className="hidden sm:flex h-10 w-10 rounded-lg bg-gradient-to-br from-zinc-900 to-zinc-800 dark:from-zinc-100 dark:to-zinc-300 text-white dark:text-zinc-950 items-center justify-center shadow-md shadow-zinc-900/20">
+                <div className="hidden sm:flex h-10 w-10 rounded-lg bg-primary text-primary-foreground items-center justify-center shadow-md shadow-accent/20">
                   <LayoutDashboard className="w-5 h-5" />
                 </div>
                 <div className="flex-1">

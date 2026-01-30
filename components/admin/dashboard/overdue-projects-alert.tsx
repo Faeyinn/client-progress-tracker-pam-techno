@@ -49,24 +49,24 @@ export function OverdueProjectsAlert({
   return (
     <CursorCardsContainer>
       <CursorCard
-        surfaceClassName="bg-gradient-to-br from-red-50 to-orange-50 dark:from-red-950/20 dark:to-orange-950/20"
-        className="rounded-[1.25rem] shadow-lg shadow-red-200/30 dark:shadow-none border border-red-200/50 dark:border-red-900/30 animate-in fade-in slide-in-from-bottom-4 duration-700"
-        primaryHue="#FCA5A5" // Red 300
-        secondaryHue="#DC2626" // Red 600
-        borderColor="#FECACA" // Red 200
-        illuminationColor="#FF000020"
+        surfaceClassName="bg-gradient-to-br from-destructive/10 to-destructive/5"
+        className="rounded-[1.25rem] shadow-lg shadow-destructive/10 dark:shadow-none border border-destructive/20 animate-in fade-in slide-in-from-bottom-4 duration-700"
+        primaryHue="oklch(0.60 0.20 25)" // Destructive red
+        secondaryHue="oklch(0.55 0.22 25)" // Deep destructive
+        borderColor="oklch(0.75 0.18 25)" // Light destructive
+        illuminationColor="oklch(0.60 0.20 25 / 0.15)" // Destructive glow
       >
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between gap-4">
             <div className="flex items-start gap-3 flex-1">
-              <div className="p-2 rounded-lg bg-red-100 dark:bg-red-900/30 mt-0.5">
-                <AlertTriangle className="w-5 h-5 text-red-600 dark:text-red-400" />
+              <div className="p-2 rounded-lg bg-destructive/10 mt-0.5">
+                <AlertTriangle className="w-5 h-5 text-destructive" />
               </div>
               <div className="flex-1">
-                <CardTitle className="text-lg font-black tracking-tight text-red-700 dark:text-red-400 uppercase">
+                <CardTitle className="text-lg font-black tracking-tight text-destructive uppercase">
                   Proyek Terlewat
                 </CardTitle>
-                <p className="text-xs font-medium text-red-600/70 dark:text-red-400/70 uppercase tracking-widest mt-0.5">
+                <p className="text-xs font-medium text-destructive/70 uppercase tracking-widest mt-0.5">
                   {overdueProjects.length} proyek melewati deadline
                 </p>
               </div>
@@ -88,7 +88,7 @@ export function OverdueProjectsAlert({
                 <Link
                   key={project.id}
                   href={`/admin/projects/${project.id}`}
-                  className="block p-3 rounded-lg bg-white/40 dark:bg-zinc-900/20 hover:bg-white/60 dark:hover:bg-zinc-900/40 transition-colors group border border-red-200/30 dark:border-red-900/20"
+                  className="block p-3 rounded-lg bg-card/40 hover:bg-card/60 transition-colors group border border-destructive/20"
                 >
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex-1 min-w-0">
@@ -98,7 +98,7 @@ export function OverdueProjectsAlert({
                       <p className="text-xs text-muted-foreground truncate">
                         {project.clientName}
                       </p>
-                      <div className="flex items-center gap-2 mt-1 text-xs text-red-600 dark:text-red-400 font-medium">
+                      <div className="flex items-center gap-2 mt-1 text-xs text-destructive font-medium">
                         <Calendar className="w-3 h-3" />
                         <span>
                           {daysOverdue} hari ({formatDeadline(project.deadline)})
@@ -107,7 +107,7 @@ export function OverdueProjectsAlert({
                     </div>
                     <Badge
                       variant="outline"
-                      className="whitespace-nowrap flex-shrink-0 border-red-200/50 dark:border-red-900/50 text-red-600 dark:text-red-400"
+                      className="whitespace-nowrap flex-shrink-0 border-destructive/50 text-destructive"
                     >
                       {project.progress}%
                     </Badge>
@@ -122,7 +122,7 @@ export function OverdueProjectsAlert({
               variant="outline"
               size="sm"
               asChild
-              className="w-full border-red-200 dark:border-red-900/50 hover:bg-red-50 dark:hover:bg-red-950/20"
+              className="w-full border-destructive/30 hover:bg-destructive/10"
             >
               <Link href="/admin/projects?status=On Progress">
                 Lihat semua ({overdueProjects.length - 3} lebih)

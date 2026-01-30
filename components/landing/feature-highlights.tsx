@@ -5,9 +5,9 @@ export function FeatureHighlights() {
     <section className="py-12">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Card 1 */}
-        <div className="group relative overflow-hidden rounded-2xl border border-border/50 bg-background/50 p-8 hover:border-foreground/20 hover:shadow-xl hover:shadow-neutral-200/20 transition-all duration-300">
-          <div className="absolute inset-0 bg-gradient-to-br from-neutral-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-          <div className="h-12 w-12 rounded-xl bg-neutral-100 dark:bg-neutral-800/80 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300 shadow-sm">
+        <div className="group relative overflow-hidden rounded-2xl border border-border/50 bg-background/50 p-8 hover:border-accent/30 hover:shadow-xl hover:shadow-accent/10 transition-all duration-300">
+          <div className="absolute inset-0 bg-gradient-to-br from-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+          <div className="h-12 w-12 rounded-xl bg-muted flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300 shadow-sm group-hover:bg-accent/10">
             <GalleryVerticalEnd className="h-6 w-6 text-foreground" />
           </div>
           <h3 className="relative font-bold text-foreground text-xl mb-3 tracking-tight">
@@ -20,9 +20,9 @@ export function FeatureHighlights() {
         </div>
 
         {/* Card 2 */}
-        <div className="group relative overflow-hidden rounded-2xl border border-border/50 bg-background/50 p-8 hover:border-foreground/20 hover:shadow-xl hover:shadow-neutral-200/20 transition-all duration-300">
-          <div className="absolute inset-0 bg-gradient-to-br from-neutral-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-          <div className="h-12 w-12 rounded-xl bg-neutral-100 dark:bg-neutral-800/80 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-300 shadow-sm">
+        <div className="group relative overflow-hidden rounded-2xl border border-border/50 bg-background/50 p-8 hover:border-accent/30 hover:shadow-xl hover:shadow-accent/10 transition-all duration-300">
+          <div className="absolute inset-0 bg-gradient-to-br from-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+          <div className="h-12 w-12 rounded-xl bg-muted flex items-center justify-center mb-6 group-hover:scale-110 group-hover:-rotate-3 transition-transform duration-300 shadow-sm group-hover:bg-accent/10">
             <Lock className="h-6 w-6 text-foreground" />
           </div>
           <h3 className="relative font-bold text-foreground text-xl mb-3 tracking-tight">
@@ -35,9 +35,9 @@ export function FeatureHighlights() {
         </div>
 
         {/* Card 3 */}
-        <div className="group relative overflow-hidden rounded-2xl border border-border/50 bg-background/50 p-8 hover:border-foreground/20 hover:shadow-xl hover:shadow-neutral-200/20 transition-all duration-300">
-          <div className="absolute inset-0 bg-gradient-to-br from-neutral-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-          <div className="h-12 w-12 rounded-xl bg-neutral-100 dark:bg-neutral-800/80 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300 shadow-sm">
+        <div className="group relative overflow-hidden rounded-2xl border border-border/50 bg-background/50 p-8 hover:border-accent/30 hover:shadow-xl hover:shadow-accent/10 transition-all duration-300">
+          <div className="absolute inset-0 bg-gradient-to-br from-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+          <div className="h-12 w-12 rounded-xl bg-muted flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300 shadow-sm group-hover:bg-accent/10">
             <History className="h-6 w-6 text-foreground" />
           </div>
           <h3 className="relative font-bold text-foreground text-xl mb-3 tracking-tight">
