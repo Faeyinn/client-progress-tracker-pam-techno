@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
+import { Suspense } from "react";
 import { useDashboardLogic } from "@/components/admin/dashboard/hooks/use-dashboard";
 import { ProjectTable } from "@/components/admin/dashboard/project-table";
 import { ProjectFilters } from "@/components/admin/dashboard/project-filters";
-import { NewProjectModal } from "@/components/admin/dashboard/new-project-modal";
+import { NewProjectModalHandler } from "@/components/admin/dashboard/new-project-modal-handler";
 import { DashboardHeader } from "@/components/admin/dashboard/dashboard-header";
 import { BottomNav } from "@/components/admin/shared/bottom-nav";
 import { Button } from "@/components/ui/button";
@@ -19,10 +19,6 @@ import {
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function ProjectsPage() {
-  const searchParams = useSearchParams();
-  const [isNewProjectModalOpen, setIsNewProjectModalOpen] = useState(
-    searchParams.get("newProject") === "true"
-  );
   const {
     projects,
     filteredProjects,
@@ -40,11 +36,6 @@ export default function ProjectsPage() {
   useEffect(() => {
     fetchProjects();
   }, [fetchProjects]);
-
-  // Watch for newProject query parameter changes
-  useEffect(() => {
-    setIsNewProjectModalOpen(searchParams.get("newProject") === "true");
-  }, [searchParams]);
 
   return (
     <div className="min-h-screen bg-background transition-colors duration-500">
@@ -125,11 +116,9 @@ export default function ProjectsPage() {
                       Refresh
                     </Button>
                     <div className="hidden md:block">
-                      <NewProjectModal
-                        onSuccess={fetchProjects}
-                        open={isNewProjectModalOpen}
-                        onOpenChange={setIsNewProjectModalOpen}
-                      />
+                      <Suspense fallback={null}>
+                        <NewProjectModalHandler onSuccess={fetchProjects} />
+                      </Suspense>
                     </div>
                   </div>
                 </div>
