@@ -257,7 +257,10 @@ export function NewProjectModal({
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-foreground hover:bg-foreground/90 text-background shadow-sm transition-all duration-200 active:scale-[0.98] h-10">
+        <Button 
+          data-new-project-trigger
+          className="bg-foreground hover:bg-foreground/90 text-background shadow-sm transition-all duration-200 active:scale-[0.98] h-10"
+        >
           <Plus className="w-4 h-4 mr-2" />
           <span className="hidden sm:inline">Proyek Baru</span>
           <span className="sm:hidden">Baru</span>

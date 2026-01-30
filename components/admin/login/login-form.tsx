@@ -28,7 +28,7 @@ export function LoginForm() {
           Selamat Datang Kembali
         </h2>
         <p className="text-muted-foreground font-medium">
-          Masukkan kredensial Anda untuk mengakses dashboard admin.
+          Masukkan kredensial Kamu untuk mengakses dashboard admin.
         </p>
       </div>
 
@@ -109,7 +109,7 @@ export function LoginForm() {
           {isLoading ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Sedang Masuk...
+              Tunggu Yaa...
             </>
           ) : (
             <>

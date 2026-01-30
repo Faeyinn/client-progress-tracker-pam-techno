@@ -236,7 +236,7 @@ export function AddLogForm({
                       })
                     }
                     disabled={isSubmitting}
-                    className="bg-background border-border/50 h-10 file:text-xs file:font-bold file:mr-4 file:bg-foreground file:text-background file:rounded-md border-dashed"
+                    className="bg-background/50 border-border/50 h-auto py-1.5 px-2 file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:text-[10px] file:font-bold file:uppercase file:tracking-wider file:bg-foreground file:text-background hover:file:bg-foreground/90 cursor-pointer border-dashed transition-all hover:bg-muted/20"
                   />
                 </div>
               </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useState, useMemo } from "react";
 import {
   Area,
   AreaChart,
@@ -11,6 +11,7 @@ import {
   YAxis,
 } from "recharts";
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import {
   CursorCard,
   CursorCardsContainer,
@@ -23,6 +24,7 @@ import {
   endOfMonth,
   eachMonthOfInterval,
   isSameMonth,
+  subYears,
 } from "date-fns";
 import { id } from "date-fns/locale";
 
@@ -31,13 +33,15 @@ interface ProjectChartProps {
 }
 
 export function ProjectChart({ projects }: ProjectChartProps) {
-  // Aggregate data by month for the last 6 months
+  const [monthRange, setMonthRange] = useState(6);
+
+  // Aggregate data by month for the selected range
   const chartData = useMemo(() => {
     const today = new Date();
-    const sixMonthsAgo = subMonths(today, 5); // Interval of 6 months
+    const rangeStartDate = subMonths(today, monthRange - 1);
 
     const months = eachMonthOfInterval({
-      start: startOfMonth(sixMonthsAgo),
+      start: startOfMonth(rangeStartDate),
       end: endOfMonth(today),
     });
 
@@ -57,7 +61,13 @@ export function ProjectChart({ projects }: ProjectChartProps) {
         completed,
       };
     });
-  }, [projects]);
+  }, [projects, monthRange]);
+
+  const rangeOptions = [
+    { label: "3 Bulan", value: 3 },
+    { label: "6 Bulan", value: 6 },
+    { label: "1 Tahun", value: 12 },
+  ];
 
   return (
     <CursorCardsContainer>
@@ -69,13 +79,30 @@ export function ProjectChart({ projects }: ProjectChartProps) {
         borderColor="#F4F4F5" // Zinc 100
         illuminationColor="#FFFFFF20"
       >
-        <CardHeader className="pt-4 pb-4">
-          <CardTitle className="text-lg font-black tracking-tight uppercase text-foreground">
-            Overview Aktivitas
-          </CardTitle>
-          <p className="text-xs font-medium text-muted-foreground uppercase tracking-widest">
-            Proyek Dibuat vs Selesai (6 Bulan Terakhir)
-          </p>
+        <CardHeader className="pt-4 pb-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <CardTitle className="text-lg font-black tracking-tight uppercase text-foreground">
+              Overview Aktivitas
+            </CardTitle>
+            <p className="text-xs font-medium text-muted-foreground uppercase tracking-widest mt-1">
+              Proyek Dibuat vs Selesai
+            </p>
+          </div>
+
+          {/* Date Range Buttons */}
+          <div className="flex gap-2 flex-wrap">
+            {rangeOptions.map((option) => (
+              <Button
+                key={option.value}
+                variant={monthRange === option.value ? "default" : "outline"}
+                size="sm"
+                onClick={() => setMonthRange(option.value)}
+                className="text-xs font-bold"
+              >
+                {option.label}
+              </Button>
+            ))}
+          </div>
         </CardHeader>
         <CardContent className="p-6">
           <div className="h-[300px] w-full">

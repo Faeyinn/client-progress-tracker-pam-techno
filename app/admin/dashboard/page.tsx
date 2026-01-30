@@ -9,10 +9,12 @@ import {
 import { useDashboardLogic } from "@/components/admin/dashboard/hooks/use-dashboard";
 import { BottomNav } from "@/components/admin/shared/bottom-nav";
 import { Button } from "@/components/ui/button";
-import { RefreshCcw, LayoutDashboard, Plus } from "lucide-react";
+import { RefreshCcw, LayoutDashboard } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { RecentProjectsWidget } from "@/components/admin/dashboard/recent-projects-widget";
 import { NewProjectModal } from "@/components/admin/dashboard/new-project-modal";
+import { OverdueProjectsAlert } from "@/components/admin/dashboard/overdue-projects-alert";
+import { KPICards, KPICardsSkeleton } from "@/components/admin/dashboard/kpi-cards";
 
 import {
   CursorCard,
@@ -79,22 +81,38 @@ export default function AdminDashboardPage() {
           )}
         </div>
 
+        {/* Overdue Projects Alert */}
+        <div className="animate-in fade-in slide-in-from-bottom-6 duration-700 delay-200">
+          <OverdueProjectsAlert projects={projects} />
+        </div>
+
+        {/* KPI Cards Section */}
+        <div className="animate-in fade-in slide-in-from-bottom-8 duration-700 delay-250">
+          {isLoading ? (
+            <KPICardsSkeleton />
+          ) : (
+            <KPICards projects={projects} isLoading={isLoading} />
+          )}
+        </div>
+
         {/* Grid Layout for Charts, Activity, and Recent Projects */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
-          {/* Chart Section - Takes 2 cols */}
-          <div className="lg:col-span-2 animate-in fade-in slide-in-from-bottom-10 duration-700 delay-200">
-            <ProjectChart projects={projects} />
+          {/* Left Column - Overview and Recent Projects (2 cols) */}
+          <div className="lg:col-span-2 space-y-4 lg:space-y-5">
+            {/* Chart Section */}
+            <div className="animate-in fade-in slide-in-from-bottom-10 duration-700 delay-300">
+              <ProjectChart projects={projects} />
+            </div>
+
+            {/* Recent Projects Section - Same width as chart */}
+            <div className="animate-in fade-in slide-in-from-bottom-10 duration-700 delay-500">
+              <RecentProjectsWidget projects={projects} isLoading={isLoading} />
+            </div>
           </div>
 
-          {/* Activity Section - Takes 1 col */}
-          <div className="animate-in fade-in slide-in-from-bottom-10 duration-700 delay-300 h-full">
+          {/* Right Column - Activity */}
+          <div className="animate-in fade-in slide-in-from-bottom-10 duration-700 delay-400 h-full">
             <RecentActivity />
-          </div>
-
-          {/* Recent Projects Section - Row 2, Spans full width or maybe 2 cols if we want? Let's make it full width or 2 cols */}
-          {/* Let's put Recent Projects below Chart, spanning 2 cols. */}
-          <div className="lg:col-span-2 animate-in fade-in slide-in-from-bottom-12 duration-700 delay-400">
-            <RecentProjectsWidget projects={projects} isLoading={isLoading} />
           </div>
         </div>
       </main>

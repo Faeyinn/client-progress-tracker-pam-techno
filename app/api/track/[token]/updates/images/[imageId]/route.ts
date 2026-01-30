@@ -21,18 +21,32 @@ export async function GET(
         id: imageId,
         progressUpdate: { projectId: project.id },
       },
-      select: { fileData: true, mimeType: true, fileName: true },
+      select: { fileUrl: true, mimeType: true, fileName: true },
     });
 
     if (!image) {
       return new Response("Not found", { status: 404 });
     }
 
-    return new Response(image.fileData, {
+    if (!image.fileUrl) {
+      return new Response("Not found", { status: 404 });
+    }
+
+    const upstream = await fetch(image.fileUrl);
+
+    if (!upstream.ok) {
+      return new Response("Not found", { status: 404 });
+    }
+
+    const contentType =
+      upstream.headers.get("content-type") || image.mimeType || "image/*";
+
+    return new Response(upstream.body, {
       headers: {
-        "Content-Type": image.mimeType || "image/*",
+        "Content-Type": contentType,
         "Content-Disposition": `inline; filename=\"${image.fileName || "image"}\"`,
         "Cache-Control": "private, max-age=0, must-revalidate",
+        "X-Content-Type-Options": "nosniff",
       },
     });
   } catch (error) {

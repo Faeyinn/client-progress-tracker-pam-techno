@@ -17,6 +17,8 @@ import {
   MessageSquare,
   Clock,
   AlertCircle,
+  FileText,
+  ChevronRight,
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -83,6 +85,31 @@ export default function ProjectDetailPage() {
       {/* Header */}
       <header className="bg-background/80 backdrop-blur-xl border-b border-border/50 sticky top-0 z-50 supports-backdrop-filter:bg-background/60">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          {/* Breadcrumb */}
+          <div className="flex items-center gap-2 text-xs text-muted-foreground mb-4 overflow-hidden">
+            <Link
+              href="/admin/dashboard"
+              className="hover:text-foreground transition-colors truncate"
+            >
+              Dashboard
+            </Link>
+            <ChevronRight className="w-3 h-3 shrink-0" />
+            <Link
+              href="/admin/projects"
+              className="hover:text-foreground transition-colors truncate"
+            >
+              Projects
+            </Link>
+            <ChevronRight className="w-3 h-3 shrink-0" />
+            <span className="text-foreground font-medium truncate">
+              {isLoading ? (
+                <Skeleton className="w-24 h-3 inline-block" />
+              ) : (
+                project?.projectName
+              )}
+            </span>
+          </div>
+
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-4 min-w-0">
               <Link
@@ -169,12 +196,12 @@ export default function ProjectDetailPage() {
                   <span className="sm:hidden">Timeline</span>
                 </TabsTrigger>
                 <TabsTrigger
-                  value="archive"
+                  value="documents"
                   className="data-[state=active]:bg-background data-[state=active]:shadow-sm flex items-center gap-2"
                 >
-                  <MessageSquare className="w-4 h-4" />
-                  <span className="hidden sm:inline">Archive</span>
-                  <span className="sm:hidden">Archive</span>
+                  <FileText className="w-4 h-4" />
+                  <span className="hidden sm:inline">Documents</span>
+                  <span className="sm:hidden">Docs</span>
                 </TabsTrigger>
                 <TabsTrigger
                   value="feedback"
@@ -263,7 +290,7 @@ export default function ProjectDetailPage() {
                 )}
               </TabsContent>
 
-              <TabsContent value="archive" className="space-y-4 mt-2">
+              <TabsContent value="documents" className="space-y-4 mt-2">
                 {isLoading ? (
                   <div className="space-y-4">
                     <Skeleton className="h-8 w-32" />

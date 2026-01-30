@@ -1,9 +1,18 @@
 "use client";
 
+import { useState, useMemo } from "react";
 import Link from "next/link";
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { FolderKanban, ArrowRight } from "lucide-react";
+import { FolderKanban, ArrowRight, Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   CursorCard,
   CursorCardsContainer,
@@ -28,9 +37,27 @@ export function RecentProjectsWidget({
   projects,
   isLoading,
 }: RecentProjectsWidgetProps) {
-  // Take only the 5 most recent projects
-  // Assuming 'projects' is already sorted by date from the API, otherwise we might need sorting
-  const recentProjects = projects.slice(0, 5);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState<"all" | "On Progress" | "Done">("all");
+
+  const filteredProjects = useMemo(() => {
+    let result = projects.slice(0, 5);
+
+    if (searchQuery.trim()) {
+      const lowerQuery = searchQuery.toLowerCase();
+      result = result.filter(
+        (project) =>
+          project.projectName.toLowerCase().includes(lowerQuery) ||
+          project.clientName.toLowerCase().includes(lowerQuery),
+      );
+    }
+
+    if (statusFilter !== "all") {
+      result = result.filter((project) => project.status === statusFilter);
+    }
+
+    return result;
+  }, [projects, searchQuery, statusFilter]);
 
   const getInitials = (name: string) => {
     return name
@@ -43,13 +70,13 @@ export function RecentProjectsWidget({
 
   const getAvatarColor = (name: string) => {
     const colors = [
-      "bg-red-100 text-red-600 dark:bg-red-900/20 dark:text-red-400",
-      "bg-orange-100 text-orange-600 dark:bg-orange-900/20 dark:text-orange-400",
-      "bg-amber-100 text-amber-600 dark:bg-amber-900/20 dark:text-amber-400",
-      "bg-green-100 text-green-600 dark:bg-green-900/20 dark:text-green-400",
-      "bg-blue-100 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400",
-      "bg-indigo-100 text-indigo-600 dark:bg-indigo-900/20 dark:text-indigo-400",
-      "bg-violet-100 text-violet-600 dark:bg-violet-900/20 dark:text-violet-400",
+      "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400",
+      "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400",
+      "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400",
+      "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400",
+      "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400",
+      "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400",
+      "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400",
     ];
     let hash = 0;
     for (let i = 0; i < name.length; i++) {
@@ -68,23 +95,58 @@ export function RecentProjectsWidget({
         borderColor="#F4F4F5"
         illuminationColor="#FFFFFF20"
       >
-        <CardHeader className="pt-6 pb-4 border-b border-border/40 flex flex-row items-center justify-between">
-          <div className="flex items-center gap-2">
-            <FolderKanban className="w-4 h-4 text-muted-foreground" />
-            <CardTitle className="text-lg font-black tracking-tight uppercase text-foreground">
-              Proyek Terbaru
-            </CardTitle>
+        <CardHeader className="pt-6 pb-4 border-b border-border/40">
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-row items-center justify-between">
+              <div className="flex items-center gap-2">
+                <FolderKanban className="w-4 h-4 text-muted-foreground" />
+                <CardTitle className="text-lg font-black tracking-tight uppercase text-foreground">
+                  Proyek Terbaru
+                </CardTitle>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                asChild
+                className="text-xs font-bold text-muted-foreground hover:text-foreground"
+              >
+                <Link href="/admin/projects">
+                  Lihat Semua <ArrowRight className="w-3 h-3 ml-1" />
+                </Link>
+              </Button>
+            </div>
+
+            {/* Search and Filter Bar */}
+            <div className="flex flex-col gap-3 sm:flex-row sm:gap-2">
+              <div className="relative flex-1">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  placeholder="Cari proyek..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-9 h-9 text-sm"
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery("")}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
+              <Select value={statusFilter} onValueChange={(value: any) => setStatusFilter(value)}>
+                <SelectTrigger className="w-full sm:w-40 h-9 text-sm">
+                  <SelectValue placeholder="Status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Semua Status</SelectItem>
+                  <SelectItem value="On Progress">Dalam Progress</SelectItem>
+                  <SelectItem value="Done">Selesai</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
-          <Button
-            variant="ghost"
-            size="sm"
-            asChild
-            className="text-xs font-bold text-muted-foreground hover:text-foreground"
-          >
-            <Link href="/admin/projects">
-              Lihat Semua <ArrowRight className="w-3 h-3 ml-1" />
-            </Link>
-          </Button>
         </CardHeader>
         <CardContent className="p-0">
           <div className="divide-y divide-border/30">
@@ -100,12 +162,24 @@ export function RecentProjectsWidget({
                   </div>
                 ))}
               </div>
-            ) : recentProjects.length === 0 ? (
-              <div className="p-12 text-center text-muted-foreground text-sm">
-                Belum ada proyek
+            ) : filteredProjects.length === 0 ? (
+              <div className="p-12 text-center">
+                <div className="flex justify-center mb-3">
+                  <div className="p-3 rounded-xl bg-muted">
+                    <FolderKanban className="w-6 h-6 text-muted-foreground" />
+                  </div>
+                </div>
+                <p className="text-sm font-medium text-foreground mb-1">
+                  Tidak ada proyek ditemukan
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  {searchQuery || statusFilter !== "all"
+                    ? "Coba sesuaikan filter Anda"
+                    : "Belum ada proyek dibuat"}
+                </p>
               </div>
             ) : (
-              recentProjects.map((project) => (
+              filteredProjects.map((project) => (
                 <Link
                   key={project.id}
                   href={`/admin/projects/${project.id}`}
@@ -133,7 +207,7 @@ export function RecentProjectsWidget({
                         "text-[10px] uppercase font-bold tracking-wider px-2 py-1 rounded-md",
                         project.status === "Done"
                           ? "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400"
-                          : "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
+                          : "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400",
                       )}
                     >
                       {project.status === "Done"

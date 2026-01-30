@@ -10,22 +10,14 @@ import { TimelineSection } from "@/components/track/timeline-section";
 import { FeedbackForm } from "@/components/track/feedback-form";
 import { ContactFooter } from "@/components/track/contact-footer";
 import { useTracking } from "@/components/track/hooks/use-tracking";
-import { ProgressUpdatesFeed } from "@/components/track/hub/progress-updates-feed";
 import { DiscussionArchiveViewer } from "@/components/track/hub/discussion-archive-viewer";
 
 export default function TrackPage() {
   const params = useParams();
   const token = params.token as string;
 
-  const {
-    project,
-    logs,
-    artifacts,
-    updates,
-    isLoading,
-    error,
-    latestProgress,
-  } = useTracking(token);
+  const { project, logs, artifacts, isLoading, error, latestProgress } =
+    useTracking(token);
 
   if (error || (!project && !isLoading)) {
     return (
@@ -71,10 +63,6 @@ export default function TrackPage() {
                 latestProgress={latestProgress}
                 isLoading={isLoading}
               />
-            </div>
-
-            <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-150">
-              <ProgressUpdatesFeed updates={updates} isLoading={isLoading} />
             </div>
 
             <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200">

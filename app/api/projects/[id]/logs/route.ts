@@ -4,6 +4,8 @@ import { sendWhatsAppFonnte } from "@/lib/whatsapp";
 import { requireAdminSession } from "@/lib/api/admin";
 import { supabase } from "@/lib/supabase";
 
+import { ProjectPhase } from "@/lib/types/project";
+
 export async function POST(
   request: Request,
   { params }: { params: Promise<{ id: string }> },
@@ -68,7 +70,7 @@ export async function POST(
       const parsed = JSON.parse(linksRaw);
       if (Array.isArray(parsed)) {
         links = parsed
-          .map((l: any) => ({
+          .map((l: { label?: string; url?: string }) => ({
             label: String(l.label || "Link").trim(),
             url: String(l.url || "").trim(),
           }))
@@ -78,19 +80,18 @@ export async function POST(
       links = [];
     }
 
-    // Combined Creation in Transaction
-    const log = await (prisma.$transaction(async (tx) => {
-      let progressUpdateId = null;
-
-      if (
-        visualDescription.trim() ||
-        imageFiles.length > 0 ||
-        links.length > 0
-      ) {
-        console.log("CREATE_LOG_INFO: Creating new ProgressUpdate.");
-
-        // Upload images to Supabase first
-        const uploadedImages = await Promise.all(
+    // 1. Upload images to Supabase (Outside Transaction)
+    let uploadedImages: {
+      fileName: string;
+      mimeType: string;
+      fileSize: number;
+      fileUrl: string;
+      sortOrder: number;
+    }[] = [];
+    if (imageFiles.length > 0) {
+      console.log("CREATE_LOG_INFO: Uploading images to Supabase...");
+      try {
+        uploadedImages = await Promise.all(
           imageFiles.map(async (f, index) => {
             const fileBuffer = await f.arrayBuffer();
             const fileName = `${projectId}/${Date.now()}-${f.name.replace(/\s+/g, "-")}`;
@@ -120,12 +121,32 @@ export async function POST(
             };
           }),
         );
+        console.log("CREATE_LOG_INFO: Images uploaded successfully.");
+      } catch (err) {
+        console.error("CREATE_LOG_UPLOAD_ERROR:", err);
+        return NextResponse.json(
+          { message: "Gagal mengupload gambar. Silakan coba lagi." },
+          { status: 500 },
+        );
+      }
+    }
+
+    // 2. Database Transaction
+    const log = await (prisma.$transaction(async (tx) => {
+      let progressUpdateId = null;
+
+      if (
+        visualDescription.trim() ||
+        uploadedImages.length > 0 ||
+        links.length > 0
+      ) {
+        console.log("CREATE_LOG_INFO: Creating new ProgressUpdate.");
 
         const update = await tx.progressUpdate.create({
           data: {
             projectId,
             description: visualDescription.trim() || description.trim(),
-            phase: phaseRaw ? (phaseRaw as any) : null,
+            phase: phaseRaw ? (phaseRaw as ProjectPhase) : null,
             links: { create: links },
             images: {
               create: uploadedImages,
@@ -138,7 +159,7 @@ export async function POST(
         );
       }
 
-      const newLog = await (tx.projectLog as any).create({
+      const newLog = await tx.projectLog.create({
         data: {
           projectId,
           title,
@@ -220,23 +241,32 @@ export async function POST(
         description: log.description,
         percentage: log.percentage,
         createdAt: log.createdAt,
-        progressUpdate: (log as any).progressUpdate
+        progressUpdate: log.progressUpdate
           ? {
-              id: (log as any).progressUpdate.id,
-              description: (log as any).progressUpdate.description,
-              phase: (log as any).progressUpdate.phase,
-              createdAt: (log as any).progressUpdate.createdAt,
-              images: (log as any).progressUpdate.images.map((img: any) => ({
-                id: img.id,
-                url: img.fileUrl,
-                fileName: img.fileName,
-                mimeType: img.mimeType,
-              })),
-              links: (log as any).progressUpdate.links.map((l: any) => ({
-                id: l.id,
-                label: l.label,
-                url: l.url,
-              })),
+              id: log.progressUpdate.id,
+              description: log.progressUpdate.description,
+              phase: log.progressUpdate.phase,
+              createdAt: log.progressUpdate.createdAt,
+              images: log.progressUpdate.images.map(
+                (img: {
+                  id: string;
+                  fileUrl: string;
+                  fileName?: string | null;
+                  mimeType?: string | null;
+                }) => ({
+                  id: img.id,
+                  url: img.fileUrl,
+                  fileName: img.fileName,
+                  mimeType: img.mimeType,
+                }),
+              ),
+              links: log.progressUpdate.links.map(
+                (l: { id: string; label: string; url: string }) => ({
+                  id: l.id,
+                  label: l.label,
+                  url: l.url,
+                }),
+              ),
             }
           : null,
       },

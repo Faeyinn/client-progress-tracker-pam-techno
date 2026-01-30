@@ -52,9 +52,9 @@ export function RecentActivity() {
       <CursorCard
         surfaceClassName="bg-white dark:bg-zinc-900"
         className="rounded-[1.5rem] shadow-lg shadow-zinc-200/50 dark:shadow-none h-full"
-        primaryHue="#E4E4E7" // Zinc 200
-        secondaryHue="#52525B" // Zinc 600
-        borderColor="#F4F4F5" // Zinc 100
+        primaryHue="#E4E4E7"
+        secondaryHue="#52525B"
+        borderColor="#F4F4F5"
         illuminationColor="#FFFFFF20"
       >
         <CardHeader className="pt-4 pb-4 border-b border-border/40">
@@ -64,14 +64,14 @@ export function RecentActivity() {
               Aktivitas
             </CardTitle>
           </div>
-          <p className="text-xs font-medium text-muted-foreground uppercase tracking-widest">
+          <p className="text-xs font-medium text-muted-foreground uppercase tracking-widest mt-1">
             Log Terbaru
           </p>
         </CardHeader>
         <CardContent className="p-6">
-          <div className="max-h-[350px] overflow-y-auto custom-scrollbar">
+          <div className="max-h-[350px] overflow-y-auto">
             {isLoading ? (
-              <div className="p-4 space-y-4">
+              <div className="space-y-4">
                 {[1, 2, 3].map((i) => (
                   <div key={i} className="flex gap-3 animate-pulse">
                     <div className="w-8 h-8 rounded-full bg-zinc-100 dark:bg-zinc-800" />
@@ -83,8 +83,11 @@ export function RecentActivity() {
                 ))}
               </div>
             ) : logs.length === 0 ? (
-              <div className="p-8 text-center text-muted-foreground text-xs">
-                Belum ada aktivitas tercatat
+              <div className="p-8 text-center">
+                <div className="flex justify-center mb-2">
+                  <AlertCircle className="w-6 h-6 text-muted-foreground/50" />
+                </div>
+                <p className="text-sm font-medium text-foreground">Tidak ada aktivitas</p>
               </div>
             ) : (
               <div className="divide-y divide-border/30">
@@ -95,21 +98,21 @@ export function RecentActivity() {
                   return (
                     <div
                       key={log.id}
-                      className="p-4 hover:bg-zinc-50/50 dark:hover:bg-zinc-800/10 transition-colors group"
+                      className="py-4 first:pt-0 last:pb-0 hover:bg-zinc-50/50 dark:hover:bg-zinc-800/10 -mx-2 px-2 rounded transition-colors"
                     >
                       <div className="flex gap-3">
                         <div
                           className={cn(
                             "w-8 h-8 rounded-full flex items-center justify-center shrink-0 border",
                             isDone
-                              ? "bg-green-100 border-green-200 text-green-600 dark:bg-green-900/20 dark:border-green-900/30 dark:text-green-400"
-                              : "bg-zinc-100 border-zinc-200 text-zinc-500 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-400",
+                              ? "bg-zinc-100 border-zinc-200 text-zinc-600 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-400"
+                              : "bg-zinc-100 border-zinc-200 text-zinc-600 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-400",
                           )}
                         >
                           <Icon className="w-4 h-4" />
                         </div>
-                        <div className="flex-1 space-y-1">
-                          <p className="text-sm font-medium leading-none text-foreground">
+                        <div className="flex-1 space-y-1 min-w-0">
+                          <p className="text-sm font-medium leading-none text-foreground truncate">
                             <span className="font-bold">
                               {log.project.projectName}
                             </span>
@@ -117,11 +120,11 @@ export function RecentActivity() {
                           <p className="text-xs text-muted-foreground line-clamp-1">
                             {log.description || log.title}
                           </p>
-                          <div className="flex items-center gap-2 mt-1.5">
-                            <span className="text-[10px] uppercase font-bold tracking-wider text-muted-foreground/60 bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded-md">
+                          <div className="flex items-center gap-2 mt-1.5 flex-wrap">
+                            <span className="text-[10px] uppercase font-bold tracking-wider text-muted-foreground/60 bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded-md whitespace-nowrap">
                               {log.percentage}%
                             </span>
-                            <span className="text-[10px] text-muted-foreground/50 tabular-nums">
+                            <span className="text-[10px] text-muted-foreground/50 tabular-nums whitespace-nowrap">
                               {formatDistanceToNow(new Date(log.createdAt), {
                                 addSuffix: true,
                                 locale: id,

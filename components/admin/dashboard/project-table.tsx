@@ -49,6 +49,9 @@ import {
   Clock,
   ArrowUpRight,
   AlertTriangle,
+  ArrowUpDown,
+  ArrowUp,
+  ArrowDown,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -119,13 +122,13 @@ function ProgressRing({
   );
 }
 
-// Check if deadline is approaching (within 3 days)
+// Check if deadline is approaching (within 7 days)
 function isDeadlineUrgent(deadline: string): boolean {
   const deadlineDate = new Date(deadline);
   const now = new Date();
   const diffTime = deadlineDate.getTime() - now.getTime();
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  return diffDays <= 3 && diffDays >= 0;
+  return diffDays <= 7 && diffDays >= 0;
 }
 
 // Skeleton loading component
@@ -159,14 +162,58 @@ export function ProjectTable({
   const router = useRouter();
   const [projectToDelete, setProjectToDelete] = useState<string | null>(null);
 
+  /* Sort State */
+  const [sortField, setSortField] = useState<'clientName' | 'projectName' | 'deadline' | 'progress' | null>(null);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+
   /* Pagination State */
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
-  const totalPages = Math.ceil(projects.length / itemsPerPage);
+  const handleSort = (field: 'clientName' | 'projectName' | 'deadline' | 'progress') => {
+    if (sortField === field) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+    setCurrentPage(1); // Reset to first page when sorting
+  };
+
+  const getSortIcon = (field: string) => {
+    if (sortField !== field) return <ArrowUpDown className="w-3.5 h-3.5 opacity-50" />;
+    return sortDirection === 'asc' ? 
+      <ArrowUp className="w-3.5 h-3.5" /> : 
+      <ArrowDown className="w-3.5 h-3.5" />;
+  };
+
+  // Sort projects
+  const sortedProjects = [...projects].sort((a, b) => {
+    if (!sortField) return 0;
+    
+    let aVal: any = a[sortField];
+    let bVal: any = b[sortField];
+    
+    if (sortField === 'deadline') {
+      aVal = new Date(a.deadline).getTime();
+      bVal = new Date(b.deadline).getTime();
+    } else if (sortField === 'progress') {
+      aVal = a.progress;
+      bVal = b.progress;
+    } else {
+      aVal = (aVal || '').toString().toLowerCase();
+      bVal = (bVal || '').toString().toLowerCase();
+    }
+    
+    if (aVal < bVal) return sortDirection === 'asc' ? -1 : 1;
+    if (aVal > bVal) return sortDirection === 'asc' ? 1 : -1;
+    return 0;
+  });
+
+  const totalPages = Math.ceil(sortedProjects.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentProjects = projects.slice(startIndex, endIndex);
+  const currentProjects = sortedProjects.slice(startIndex, endIndex);
 
   const getInitials = (name: string) => {
     return name
@@ -221,17 +268,25 @@ export function ProjectTable({
 
   if (projects.length === 0) {
     return (
-      <div className="text-center py-20 px-4 rounded-[1.5rem] border border-dashed border-border/40 bg-muted/5 mt-4">
+      <div className="text-center py-20 px-4 rounded-[1.5rem] border-2 border-dashed border-border/40 bg-muted/5 mt-4">
         <div className="w-24 h-24 rounded-3xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center mx-auto mb-6 shadow-inner">
           <FolderKanban className="w-10 h-10 text-muted-foreground/30" />
         </div>
         <h3 className="text-xl font-bold text-foreground mb-2">
           Belum ada proyek
         </h3>
-        <p className="text-muted-foreground max-w-sm mx-auto leading-relaxed">
-          Mulai tambahkan proyek baru untuk memantau progress dan kolaborasi
-          dengan klien.
+        <p className="text-sm text-muted-foreground max-w-sm mx-auto leading-relaxed mb-6">
+          Mulai tambahkan proyek baru untuk memantau progress dan kolaborasi dengan klien.
         </p>
+        <Button
+          onClick={() => {
+            const newProjectBtn = document.querySelector('[data-new-project-trigger]') as HTMLElement;
+            newProjectBtn?.click();
+          }}
+          className="rounded-full font-bold"
+        >
+          Buat Proyek Pertama
+        </Button>
       </div>
     );
   }
@@ -395,20 +450,44 @@ export function ProjectTable({
         <Table>
           <TableHeader>
             <TableRow className="bg-zinc-50/50 dark:bg-zinc-900/50 hover:bg-zinc-50/80 border-b border-border/40">
-              <TableHead className="py-5 pl-8 font-black text-xs uppercase tracking-[0.15em] text-muted-foreground/70">
-                Client
+              <TableHead 
+                className="py-5 pl-8 font-black text-xs uppercase tracking-[0.15em] text-muted-foreground/70 cursor-pointer hover:text-foreground transition-colors select-none"
+                onClick={() => handleSort('clientName')}
+              >
+                <div className="flex items-center gap-2">
+                  Client
+                  {getSortIcon('clientName')}
+                </div>
               </TableHead>
-              <TableHead className="font-black text-xs uppercase tracking-[0.15em] text-muted-foreground/70">
-                Project Name
+              <TableHead 
+                className="font-black text-xs uppercase tracking-[0.15em] text-muted-foreground/70 cursor-pointer hover:text-foreground transition-colors select-none"
+                onClick={() => handleSort('projectName')}
+              >
+                <div className="flex items-center gap-2">
+                  Project Name
+                  {getSortIcon('projectName')}
+                </div>
               </TableHead>
-              <TableHead className="font-black text-xs uppercase tracking-[0.15em] text-muted-foreground/70">
-                Deadline
+              <TableHead 
+                className="font-black text-xs uppercase tracking-[0.15em] text-muted-foreground/70 cursor-pointer hover:text-foreground transition-colors select-none"
+                onClick={() => handleSort('deadline')}
+              >
+                <div className="flex items-center gap-2">
+                  Deadline
+                  {getSortIcon('deadline')}
+                </div>
               </TableHead>
               <TableHead className="font-black text-xs uppercase tracking-[0.15em] text-muted-foreground/70">
                 Status
               </TableHead>
-              <TableHead className="font-black text-xs uppercase tracking-[0.15em] text-muted-foreground/70 w-48">
-                Progress
+              <TableHead 
+                className="font-black text-xs uppercase tracking-[0.15em] text-muted-foreground/70 w-48 cursor-pointer hover:text-foreground transition-colors select-none"
+                onClick={() => handleSort('progress')}
+              >
+                <div className="flex items-center gap-2">
+                  Progress
+                  {getSortIcon('progress')}
+                </div>
               </TableHead>
               <TableHead className="font-black text-right pr-8 text-xs uppercase tracking-[0.15em] text-muted-foreground/70">
                 Actions

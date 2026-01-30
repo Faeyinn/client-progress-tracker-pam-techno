@@ -23,7 +23,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { FilePlus2, Link2, Trash2, ExternalLink, Download } from "lucide-react";
+import { FilePlus2, Link2, Trash2, ExternalLink, FileText } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { useArtifacts } from "@/components/admin/projects/hooks/detail/use-artifacts";
 import { ARTIFACT_TYPES, PROJECT_PHASES } from "@/lib/project-phase";
 import type { ArtifactType, ProjectPhase } from "@/lib/types/project";
@@ -35,6 +45,7 @@ export function DiscussionArchiveTab({ projectId }: { projectId: string }) {
     useArtifacts(projectId);
 
   const [open, setOpen] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState<string | null>(null);
   const [uploadMode, setUploadMode] = useState<UploadMode>("file");
 
   const [title, setTitle] = useState("");
@@ -70,7 +81,7 @@ export function DiscussionArchiveTab({ projectId }: { projectId: string }) {
       }
 
       await createArtifact(form);
-      toast.success("Artifact berhasil disimpan");
+      toast.success("Document berhasil disimpan");
 
       setOpen(false);
       setTitle("");
@@ -79,17 +90,18 @@ export function DiscussionArchiveTab({ projectId }: { projectId: string }) {
       setFile(null);
     } catch (err) {
       toast.error(
-        err instanceof Error ? err.message : "Gagal menyimpan artifact",
+        err instanceof Error ? err.message : "Gagal menyimpan document",
       );
     } finally {
       setSubmitting(false);
     }
   }
 
-  async function onDelete(id: string) {
+  async function confirmDelete(id: string) {
     try {
       await deleteArtifact(id);
-      toast.success("Artifact dihapus");
+      toast.success("Document dihapus");
+      setItemToDelete(null);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Gagal menghapus");
     }
@@ -100,10 +112,10 @@ export function DiscussionArchiveTab({ projectId }: { projectId: string }) {
       <div className="flex items-center justify-between px-1">
         <div className="space-y-1">
           <h2 className="text-lg font-semibold tracking-tight">
-            Discussion Archive
+            Project Documents
           </h2>
           <p className="text-xs text-muted-foreground">
-            Simpan wireframe, flow, dan notes meeting agar klien bisa melihat.
+            Kumpulan dokumen, wireframe, dan file terkait proyek.
           </p>
         </div>
 
@@ -111,12 +123,12 @@ export function DiscussionArchiveTab({ projectId }: { projectId: string }) {
           <DialogTrigger asChild>
             <Button className="rounded-full shadow-lg shadow-foreground/10 bg-foreground hover:bg-foreground/90 text-background gap-2">
               <FilePlus2 className="w-4 h-4" />
-              <span>Tambah Artifact</span>
+              <span>Tambah Documents</span>
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-2xl">
             <DialogHeader>
-              <DialogTitle>Tambah Artifact</DialogTitle>
+              <DialogTitle>Tambah Documents</DialogTitle>
               <DialogDescription>
                 Upload file atau simpan link (Figma, docs, dsb.).
               </DialogDescription>
@@ -202,10 +214,8 @@ export function DiscussionArchiveTab({ projectId }: { projectId: string }) {
                   <Input
                     type="file"
                     onChange={(e) => setFile(e.target.files?.[0] || null)}
+                    className="bg-background/50 border-border/50 h-auto py-1.5 px-2 file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:text-[10px] file:font-bold file:uppercase file:tracking-wider file:bg-foreground file:text-background hover:file:bg-foreground/90 cursor-pointer border-dashed transition-all hover:bg-muted/20"
                   />
-                  <p className="text-xs text-muted-foreground">
-                    File disimpan di database (cocok untuk file kecil-menengah).
-                  </p>
                 </div>
               ) : (
                 <div className="space-y-2">
@@ -243,6 +253,37 @@ export function DiscussionArchiveTab({ projectId }: { projectId: string }) {
           </DialogContent>
         </Dialog>
       </div>
+
+      <AlertDialog
+        open={!!itemToDelete}
+        onOpenChange={(val) => !val && setItemToDelete(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Hapus Dokumen?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Apakah Anda yakin ingin menghapus dokumen ini?
+              {itemToDelete && (
+                <span className="block mt-2 font-medium text-foreground">
+                  &quot;{artifacts.find((a) => a.id === itemToDelete)?.title}
+                  &quot;
+                </span>
+              )}
+              Tindakan ini tidak dapat dibatalkan. File yang tersimpan juga akan
+              dihapus permanen.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Batal</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => itemToDelete && confirmDelete(itemToDelete)}
+              className="bg-black text-white hover:bg-destructive/90"
+            >
+              Hapus
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       {error && (
         <Card className="border-dashed border-2">
@@ -282,9 +323,16 @@ export function DiscussionArchiveTab({ projectId }: { projectId: string }) {
           </div>
         ) : artifacts.length === 0 ? (
           <Card className="border-dashed border-2 border-muted-foreground/20 bg-muted/5">
-            <CardContent className="py-10 text-center text-sm text-muted-foreground">
-              Belum ada artifact.
-            </CardContent>
+            <div className="flex flex-col items-center justify-center py-16 text-center px-4">
+              <div className="w-16 h-16 rounded-2xl bg-muted flex items-center justify-center mb-4">
+                <FileText className="w-8 h-8 text-muted-foreground/50" />
+              </div>
+              <h3 className="text-lg font-semibold">Belum ada dokumen</h3>
+              <p className="text-sm text-muted-foreground mt-2 max-w-sm">
+                Belum ada dokumen, wireframe, atau file yang diunggah untuk
+                proyek ini.
+              </p>
+            </div>
           </Card>
         ) : (
           artifacts.map((a) => (
@@ -309,7 +357,7 @@ export function DiscussionArchiveTab({ projectId }: { projectId: string }) {
                   <Button
                     variant="ghost"
                     size="icon"
-                    onClick={() => onDelete(a.id)}
+                    onClick={() => setItemToDelete(a.id)}
                   >
                     <Trash2 className="w-4 h-4" />
                   </Button>
@@ -331,7 +379,7 @@ export function DiscussionArchiveTab({ projectId }: { projectId: string }) {
                       className="gap-2"
                     >
                       <a href={a.fileUrl} target="_blank" rel="noreferrer">
-                        <Download className="w-4 h-4" /> Download
+                        <ExternalLink className="w-4 h-4" /> Open Picture
                       </a>
                     </Button>
                   )}
